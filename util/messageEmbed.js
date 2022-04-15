@@ -27,7 +27,7 @@ module.exports = (message, discord, extra) => {
   }
 
   if (addField) {
-    messageEmbed.addField(addField);
+    messageEmbed.addField(...addField);
   }
 
   if (setImage) {
