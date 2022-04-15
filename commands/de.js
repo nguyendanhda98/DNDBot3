@@ -12,15 +12,6 @@ module.exports = {
     const number = args[1];
     var extra = {};
 
-    // if (!profileData) {
-    //   let profile = await profileModel.create({
-    //     userID: message.author.id,
-    //     serverID: message.guild.id,
-    //     cash: 0,
-    //     bank: 0,
-    //   });
-    //   profile.save();
-    // }
     try {
       if (amount % 1 != 0 || amount <= 0) {
         extra = {

@@ -18,6 +18,7 @@ module.exports = {
         { name: "give", value: `Chuyển tiền. \`give <người nhận> <số tiền>\`` },
         { name: "de", value: `Chơi đề. \`de <tiền cược> <số cược>\`` },
         { name: "money", value: "Kiểm tra số tiền của mình" },
+        { name: "add-money", value: "Cộng tiền cho người chơi" },
       ],
     };
 
