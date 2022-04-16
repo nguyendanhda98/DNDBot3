@@ -5,7 +5,7 @@ const GameTableManagement = require('../Base/bc/GameTableManagement')
 const gameTableManagement = GameTableManagement.getInstance()
 module.exports = {
     name: '3cay',
-    aliases: ['3cay new', ''],
+    aliases: [],
     cooldown: 0,
     permissions: [],
     description: 'choi Ba Cay',
@@ -226,7 +226,7 @@ module.exports = {
                 result = gameTable.checkWinners(host)
                 const addFields = result.playerCards.map((playerCard) => ({
                     name: playerCard.username,
-                    value: playerCard.cards.join(', '),
+                    value: playerCard.cards.join(' '),
                     inline: true,
                 }))
                 extra = {
@@ -256,7 +256,7 @@ module.exports = {
                     const game = new GameTable(host, 2)
 
                     game.join(user1)
-                    game.start(host)
+                    game.ready(host)
                     game.bet(user1, amount)
                     game.distributeCards(host)
                     const {
@@ -264,11 +264,13 @@ module.exports = {
                         playerCards,
                         message: checkWinnersMessage,
                     } = game.checkWinners(host)
+                    console.log(playerCards[0].cards)
+                    console.log(playerCards[1].cards)
 
                     extra = {
                         setDescription: `${checkWinnersMessage}
-        Bot: ${playerCards[0].cards}
-        Player: ${playerCards[1].cards}
+        Bot: ${playerCards[0].cards.join(' ')}
+        Player: ${playerCards[1].cards.join(' ')}
         `,
                     }
                     if (winners.length === 0) {
