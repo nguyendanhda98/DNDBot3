@@ -73,6 +73,17 @@ module.exports = class GameTable {
             }
         }
 
+        const checkBlackList = this.blackList.find(
+            (player) => player.id === user.id
+        )
+
+        if (checkBlackList) {
+            return {
+                message: `${user.username} không thể tham gia bàn của nhà cái ${this.host.username}, vì đã bị đá đít trước đó`,
+                success: false,
+            }
+        }
+
         if (this.gameStatus !== gameStatus.PENDDING) {
             return {
                 message: `${user.username} không thể tham gia bàn của nhà cái ${this.host.username}, bàn này đang trong trò chơi.`,
