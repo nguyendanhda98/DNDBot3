@@ -21,13 +21,10 @@ module.exports = class Card {
                 type = 'D'
                 break
             default:
+                type = 'CARD_BACK'
                 break
         }
 
-        if (!cardEmojis[`${type}${this.cardNumber}`]) {
-            console.log('xxxxxxxxxxxxxxxxx', `${type}${this.cardNumber}`)
-        }
-
-        return cardEmojis[`${type}${this.cardNumber}`]
+        return cardEmojis[`${type}${this.cardNumber ? this.cardNumber : ''}`]
     }
 }

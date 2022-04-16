@@ -3,6 +3,7 @@ const messageEmbed = require('../util/messageEmbed')
 const GameTable = require('../Base/bc/GameTable')
 const GameTableManagement = require('../Base/bc/GameTableManagement')
 const gameTableManagement = GameTableManagement.getInstance()
+
 module.exports = {
     name: '3cay',
     aliases: ['3c'],
@@ -356,15 +357,41 @@ module.exports = {
                         playerCards,
                         message: checkWinnersMessage,
                     } = game.checkWinners(host)
-                    console.log(playerCards[0].cards)
-                    console.log(playerCards[1].cards)
 
                     extra = {
-                        setDescription: `${checkWinnersMessage}
-        Bot: ${playerCards[0].cards.join(' ')}
-        Player: ${playerCards[1].cards.join(' ')}
-        `,
+                        setDescription: `Người chiến thắng là: ...`,
+                        addFields: playerCards.map((player) => ({
+                            name: player.username,
+                            value: `${player.getShowCards(0).join(' ')}`,
+                            inline: true,
+                        })),
                     }
+
+                    const getEditEmbed = (numberCard) => {
+                        extra.addFields = playerCards.map((player) => ({
+                            name: player.username,
+                            value: `${player
+                                .getShowCards(numberCard)
+                                .join(' ')}`,
+                            inline: true,
+                        }))
+
+                        response.edit({
+                            embeds: [messageEmbed(message, discord, extra)],
+                        })
+                    }
+
+                    setTimeout(() => {
+                        getEditEmbed(1)
+                        setTimeout(() => {
+                            getEditEmbed(2)
+                            setTimeout(() => {
+                                extra.setDescription = `Người chiến thắng là: ${checkWinnersMessage}`
+                                getEditEmbed(3)
+                            }, 3000)
+                        }, 2000)
+                    }, 1000)
+
                     if (winners.length === 0) {
                         await profileModel.findOneAndUpdate(
                             {
@@ -393,6 +420,6 @@ module.exports = {
         }
 
         const newEmbed = messageEmbed(message, discord, extra)
-        return message.channel.send({ embeds: [newEmbed] })
+        let response = await message.channel.send({ embeds: [newEmbed] })
     },
 }

@@ -56,6 +56,10 @@ module.exports = class GameTable {
         }
 
         this.gameStatus = gameStatus.INPROCESS
+        this.resetInfo()
+        this.players.forEach((player) => {
+            player.resetInfo()
+        })
         return {
             message: `Trận đấu của nhà cái ${this.host.username} được bắt đầu, hãy nhanh tay đặt cược`,
             success: true,
@@ -250,12 +254,6 @@ module.exports = class GameTable {
             amonunt: player.amonunt,
         }))
 
-        this.players.forEach((player) => {
-            player.resetInfo()
-        })
-
-        this.resetInfo()
-
         return summary
     }
 
@@ -303,8 +301,8 @@ module.exports = class GameTable {
         return {
             message:
                 this.winners.length === 0
-                    ? `Đã tìm ra người chiến thắng: ${this.host.username}`
-                    : `Đã tìm ra người chiến thắng: ${this.winners
+                    ? `${this.host.username}`
+                    : `${this.winners
                           .map((winner) => winner.username)
                           .join(', ')}`,
             success: true,
@@ -313,6 +311,7 @@ module.exports = class GameTable {
                 id: player.id,
                 username: player.username,
                 cards: player.getCards(),
+                getShowCards: player.getShowCard.bind(player),
             })),
             summary: this._getSummary(),
         }

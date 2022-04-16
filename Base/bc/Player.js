@@ -1,3 +1,5 @@
+const Card = require('./Card')
+
 module.exports = class Player {
     id = null
     username = null
@@ -8,6 +10,22 @@ module.exports = class Player {
     constructor(userId, username) {
         this.id = userId
         this.username = username
+    }
+
+    getShowCard(cardIndex) {
+        console.log(cardIndex)
+        console.log(this.cards)
+        const cards = []
+        console.log('xyyyyyyyyyyyy', this.cards)
+        for (let index = 0; index < 3; index++) {
+            if (index < cardIndex) {
+                cards.push(this.cards[index])
+            } else {
+                cards.push(new Card())
+            }
+        }
+
+        return cards.map((card) => card.mapCard())
     }
 
     resetInfo() {
@@ -39,7 +57,7 @@ module.exports = class Player {
     }
 
     checkExistCard(card) {
-        const newCard = this.cards(
+        const newCard = this.cards.find(
             (item) =>
                 item.cardNumber === card.cardNumber &&
                 item.cardType === card.cardType
