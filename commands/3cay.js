@@ -247,18 +247,42 @@ module.exports = {
 
                 if (!gameTable) {
                     extra = {
-                        setDescription: `Đá đít thất bại, ${author.username} chưa trở thành nhà cái.`,
+                        setDescription: `Đá đít thất bại, ${host.username} chưa trở thành nhà cái.`,
                     }
                     break
                 }
 
-                result = game.kick(host, userBeKick)
+                result = gameTable.kick(host, userBeKick)
                 extra = {
                     setDescription: result.message,
                 }
 
                 if (result.success) {
                     gameTableManagement.removePlayerInTable(userBeKick)
+                }
+
+                break
+
+            case 'allow':
+                host = { id: author.id, username: author.username }
+                const userBeAllow = {
+                    id: mentions.users.first().id,
+                    username: mentions.users.first().username,
+                }
+
+                gameTable = gameTableManagement.getTableJoined(host)
+
+                if (!gameTable) {
+                    extra = {
+                        setDescription: `Đá đít thất bại, ${host.username} chưa trở thành nhà cái.`,
+                    }
+                    break
+                }
+
+                result = gameTable.allow(host, userBeAllow)
+
+                extra = {
+                    setDescription: result.message,
                 }
 
                 break
