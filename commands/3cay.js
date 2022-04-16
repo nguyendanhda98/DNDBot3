@@ -5,12 +5,33 @@ const GameTableManagement = require('../Base/bc/GameTableManagement')
 const gameTableManagement = GameTableManagement.getInstance()
 module.exports = {
     name: '3cay',
-    aliases: ['3c'],
+    aliases: ['3cay new', ""],
     cooldown: 0,
     permissions: [],
     description: 'choi Ba Cay',
 
     async execute(message, args, cmd, client, discord, profileData) {
+<<<<<<< HEAD
+=======
+
+
+switch (cmd) {
+  case value:
+    "3cay new";
+
+    break;
+  case value:
+    "3cay new";
+
+    break;
+  default:
+    break;
+}
+
+        const amount = args[0]
+        const randomNumber = Math.floor(Math.random() * 2) + 1
+
+>>>>>>> 16fa9cd5a0b8a72bda53aa8dd0ce2d320596558d
         var extra = {}
         console.log(cmd)
         console.log(args)
