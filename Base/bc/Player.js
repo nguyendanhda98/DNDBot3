@@ -20,8 +20,13 @@ module.exports = class Player {
             this.highestCard = card
         } else {
             this.highestCard =
-                card.cardNumber + card.typeCard >
-                this.highestCard.cardNumber + this.highestCard.typeCard
+                card.cardNumber === 1
+                    ? 10 + card.cardType
+                    : card.cardNumber + card.cardType >
+                          this.highestCard.cardNumber ===
+                      1
+                    ? 10 + this.highestCard.cardType
+                    : this.highestCard.cardNumber + this.highestCard.cardType
                     ? card
                     : this.highestCard
         }
@@ -52,8 +57,8 @@ module.exports = class Player {
 
     getTypePoint() {
         return this.highestCard.cardNumber === 1
-            ? this.highestCard.typeCard + 10
-            : this.highestCard.typeCard + this.highestCard.cardNumber
+            ? this.highestCard.cardType + 10
+            : this.highestCard.cardType + this.highestCard.cardNumber
     }
 
     getCards() {
