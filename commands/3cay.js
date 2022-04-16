@@ -1,73 +1,73 @@
-const profileModel = require("../models/profileSchema");
-const messageEmbed = require("../util/messageEmbed");
-const GameTable = require("../Base/bc/GameTable");
+const profileModel = require('../models/profileSchema')
+const messageEmbed = require('../util/messageEmbed')
+const GameTable = require('../Base/bc/GameTable')
 module.exports = {
-  name: "3cay",
-  aliases: ["3c"],
-  cooldown: 0,
-  permissions: [],
-  description: "choi Ba Cay",
+    name: '3cay',
+    aliases: ['3c'],
+    cooldown: 0,
+    permissions: [],
+    description: 'choi Ba Cay',
 
-  async execute(message, args, cmd, client, discord, profileData) {
-    const amount = args[0];
-    const randomNumber = Math.floor(Math.random() * 2) + 1;
+    async execute(message, args, cmd, client, discord, profileData) {
+        const amount = args[0]
+        const randomNumber = Math.floor(Math.random() * 2) + 1
 
-    var extra = {};
-    //kiem tra DND
-    if (amount % 1 != 0 || amount <= 0) {
-      extra = {
-        setDescription: "Số DND không hợp lệ!",
-      };
-    } else if (amount > profileData.cash) {
-      extra = {
-        setDescription: "Bạn không có đủ DND trong ví",
-      };
-    } else {
-      const host = { id: "bot", username: "bot" };
-      const user1 = {
-        id: message.author.id,
-        username: message.author.username,
-      };
+        var extra = {}
+        //kiem tra DND
+        if (amount % 1 != 0 || amount <= 0) {
+            extra = {
+                setDescription: 'Số DND không hợp lệ!',
+            }
+        } else if (amount > profileData.cash) {
+            extra = {
+                setDescription: 'Bạn không có đủ DND trong ví',
+            }
+        } else {
+            const host = { id: 'bot', username: 'bot' }
+            const user1 = {
+                id: message.author.id,
+                username: message.author.username,
+            }
 
-      const game = new GameTable(host, 2);
+            const game = new GameTable(host, 2)
 
-      game.join(user1);
-      game.start(host);
-      game.bet(user1, amount);
-      game.distributeCards(host);
-      const { winner, playerCards } = game.checkWinner(host);
+            game.join(user1)
+            game.start(host)
+            game.bet(user1, amount)
+            game.distributeCards(host)
+            const { winners, playerCards, message } = game.checkWinners(host)
 
-      extra = {
-        setDescription: `Người thắng là ${winner.username} <a:DND_GIF:956987260333600810>
+            extra = {
+                setDescription: `${message}
         Bot: ${playerCards[0].cards}
         Player: ${playerCards[1].cards}
         `,
-      };
-      if (winner.username == "bot") {
-        await profileModel.findOneAndUpdate(
-          {
-            userID: message.author.id,
-          },
-          {
-            $inc: {
-              cash: -amount,
-            },
-          }
-        );
-      } else {
-        await profileModel.findOneAndUpdate(
-          {
-            userID: message.author.id,
-          },
-          {
-            $inc: {
-              cash: amount,
-            },
-          }
-        );
-      }
-    }
-    const newEmbed = messageEmbed(message, discord, extra);
-    return message.channel.send({ embeds: [newEmbed] });
-  },
-};
+            }
+            if (winners.length === 0) {
+                await profileModel.findOneAndUpdate(
+                    {
+                        userID: message.author.id,
+                    },
+                    {
+                        $inc: {
+                            cash: -amount,
+                        },
+                    }
+                )
+            } else {
+                await profileModel.findOneAndUpdate(
+                    {
+                        userID: message.author.id,
+                    },
+                    {
+                        $inc: {
+                            cash: amount,
+                        },
+                    }
+                )
+            }
+        }
+        const newEmbed = messageEmbed(message, discord, extra)
+        return message.channel.send({ embeds: [newEmbed] })
+    },
+}

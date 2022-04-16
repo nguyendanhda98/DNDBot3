@@ -21,7 +21,7 @@ console.log(game.bet(user4, 4))
 console.log(game.bet(user5, 5))
 
 console.log(game.distributeCards(host))
-console.log(game.checkWinner(host))
+console.log(game.checkWinners(host))
 // setTimeout(() => {
 //     console.log(game.players)
 // }, 100)
