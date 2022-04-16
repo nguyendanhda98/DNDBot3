@@ -17,6 +17,11 @@ module.exports = class GameTable {
         this.players.push(newHost)
     }
 
+    resetInfo() {
+        this.cardsExist = []
+        this.winners = []
+    }
+
     getInfo() {
         return {
             host: this.host,
@@ -237,7 +242,7 @@ module.exports = class GameTable {
             player.resetInfo()
         })
 
-        this.winners = []
+        this.resetInfo()
 
         return summary
     }
