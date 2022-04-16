@@ -17,22 +17,59 @@ module.exports = class GameTable {
         this.players.push(newHost)
     }
 
-    start(user) {
+    getInfo() {
+        return {
+            host: this.host,
+            players: this.players,
+            gameStatus: this.gameStatus,
+            currentUserNumber: this.players.length,
+            maxPlayer: this.maxPlayer,
+        }
+    }
+
+    ready(user) {
         if (this.host.id !== user.id) {
-            console.log('Bạn không phải nhà cái')
-            return { message: 'Bạn không phải nhà cái', success: false }
+            return {
+                message: `Ready thất bại, ${user.username} không phải là nhà cái, nhà cái của  ${user.username} là ${this.host.username}`,
+                success: false,
+            }
+        }
+
+        if (this.gameStatus === gameStatus.INPROCESS) {
+            return {
+                message: `Không thể ready, bàn của nhà cái ${this.host.username} đang trong quá trình đặt cược rồi`,
+                success: false,
+            }
+        }
+
+        if (this.players.length < 2) {
+            return {
+                message: `Không thể ready, bàn của nhà cái ${this.host.username} mới có 1 người chơi`,
+                success: false,
+            }
         }
 
         this.gameStatus = gameStatus.INPROCESS
         return {
-            message: 'Trận đấu được bắt đầu, hãy nhanh tay đặt cược',
+            message: `Trận đấu của nhà cái ${this.host.username} được bắt đầu, hãy nhanh tay đặt cược`,
             success: true,
         }
     }
     join(user) {
+        const checkExistUser = this.players.find(
+            (player) => player.id === user.id
+        )
+
+        if (checkExistUser) {
+            return {
+                message: `${user.username} đang tham gia bàn của nhà cái ${this.host.username} rồi.`,
+                success: false,
+            }
+        }
+
         if (this.gameStatus !== gameStatus.PENDDING) {
             return {
-                message: `${user.username} không thể tham gia bàn của ${this.host.username}, bàn này đang trong trò chơi.`,
+                message: `${user.username} không thể tham gia bàn của nhà cái ${this.host.username}, bàn này đang trong trò chơi.`,
                 success: false,
             }
         }
@@ -46,7 +83,7 @@ module.exports = class GameTable {
 
         this.players.push(new Player(user.id, user.username))
         return {
-            message: `${user.username} đã tham gia bàn của ${this.host.username}`,
+            message: `${user.username} đã tham gia bàn của nhà cái ${this.host.username}`,
             success: true,
         }
     }
@@ -96,7 +133,7 @@ module.exports = class GameTable {
     bet(user, value) {
         if (user.id === this.host.id) {
             return {
-                message: 'Bạn đang là nhà cái, không thể cược được',
+                message: `${user.username} đang là nhà cái, không thể cược được`,
                 success: false,
             }
         }
@@ -104,21 +141,21 @@ module.exports = class GameTable {
         const player = this.players.find((player) => player.id === user.id)
         if (!player) {
             return {
-                message: 'Bạn phải tham gia trò chơi',
+                message: `${user.username} phải tham gia một bàn thì mới cược được`,
                 success: false,
             }
         }
 
         if (this.gameStatus !== gameStatus.INPROCESS) {
             return {
-                message: 'Trò chơi chưa bắt đầu hoặc đã kết thúc',
+                message: `Bàn của nhà cái ${this.host.username} chưa sẵn sàng`,
                 success: false,
             }
         }
 
         if (this.distributeCardsState !== distributeCardsState.NO) {
             return {
-                message: 'Trò chơi đã qua giai đoạn đặt cược',
+                message: `Bàn của nhà cái ${this.host.username} đã qua giai đoạn đặt cược`,
                 success: false,
             }
         }
@@ -126,7 +163,7 @@ module.exports = class GameTable {
         player.betAmount = value
 
         return {
-            message: `${player.username} vừa cược ${value} DND`,
+            message: `${player.username} vừa cược ${value} vào bàn của nhà cái ${this.host.username} DND`,
             success: true,
         }
     }
@@ -191,10 +228,16 @@ module.exports = class GameTable {
             }
         })
 
-        return this.players.map((player) => ({
+        const summary = this.players.map((player) => ({
             id: player.id,
             amonunt: player.amonunt,
         }))
+
+        this.players.forEach((player) => {
+            player.resetInfo()
+        })
+
+        return summary
     }
 
     checkWinners(user) {
@@ -237,6 +280,7 @@ module.exports = class GameTable {
         })
         this.gameStatus = gameStatus.PENDDING
         this.distributeCardsState = distributeCardsState.NO
+
         return {
             message:
                 this.winners.length === 0

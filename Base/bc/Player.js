@@ -10,6 +10,12 @@ module.exports = class Player {
         this.username = username
     }
 
+    resetInfo() {
+        this.cards = []
+        this.highestCard = null
+        this.amonunt = 0
+    }
+
     addCard(card) {
         this.cards.push(card)
         this.findHighestCard(card)

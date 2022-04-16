@@ -36,8 +36,8 @@ module.exports = class GameTableManagement {
         delete this.playersInTable[user.id]
     }
 
-    removeTable(user) {
-        delete this.gameTables[user.id]
+    removeTable(host) {
+        delete this.gameTables[host.id]
     }
 
     listTable() {

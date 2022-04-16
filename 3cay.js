@@ -23,3 +23,7 @@ console.log(gameTableManagement.getTableJoined(user1).bet(user1, 11))
 console.log(gameTableManagement.getTableGame(host).distributeCards(host))
 console.log(gameTableManagement.getTableGame(host).checkWinners(host))
 // console.log(gameTableManagement.getTableGame(host).players)
+
+cardEmojis = {
+    '1c': '823473924',
+}
