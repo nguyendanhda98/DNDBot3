@@ -232,7 +232,7 @@ module.exports = class GameTable {
         return {
             message:
                 this.winners.length === 0
-                    ? 'Không có ai chiến thắng'
+                    ? `${this.host.username} đã chiến thắng`
                     : `Đã tìm ra người chiến thắng ${this.winners
                           .map((winner) => winner.username)
                           .join(', ')}`,

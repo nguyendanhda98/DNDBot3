@@ -35,10 +35,14 @@ module.exports = {
             game.start(host)
             game.bet(user1, amount)
             game.distributeCards(host)
-            const { winners, playerCards, message } = game.checkWinners(host)
+            const {
+                winners,
+                playerCards,
+                message: checkWinnersMessage,
+            } = game.checkWinners(host)
 
             extra = {
-                setDescription: `${message}
+                setDescription: `${checkWinnersMessage}
         Bot: ${playerCards[0].cards}
         Player: ${playerCards[1].cards}
         `,
