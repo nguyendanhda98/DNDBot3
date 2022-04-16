@@ -3,12 +3,27 @@ const messageEmbed = require('../util/messageEmbed')
 const GameTable = require('../Base/bc/GameTable')
 module.exports = {
     name: '3cay',
-    aliases: ['3c'],
+    aliases: ['3cay new', ""],
     cooldown: 0,
     permissions: [],
     description: 'choi Ba Cay',
 
     async execute(message, args, cmd, client, discord, profileData) {
+
+
+switch (cmd) {
+  case value:
+    "3cay new";
+
+    break;
+  case value:
+    "3cay new";
+
+    break;
+  default:
+    break;
+}
+
         const amount = args[0]
         const randomNumber = Math.floor(Math.random() * 2) + 1
 
