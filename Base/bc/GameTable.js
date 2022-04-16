@@ -94,6 +94,13 @@ module.exports = class GameTable {
     }
 
     bet(user, value) {
+        if (user.id === this.host.id) {
+            return {
+                message: 'Bạn đang là nhà cái, không thể cược được',
+                success: false,
+            }
+        }
+
         const player = this.players.find((player) => player.id === user.id)
         if (!player) {
             return {
@@ -228,12 +235,13 @@ module.exports = class GameTable {
                 }
             }
         })
-
+        this.gameStatus = gameStatus.PENDDING
+        this.distributeCardsState = distributeCardsState.NO
         return {
             message:
                 this.winners.length === 0
-                    ? `${this.host.username} đã chiến thắng`
-                    : `Đã tìm ra người chiến thắng ${this.winners
+                    ? `Đã tìm ra người chiến thắng: ${this.host.username}`
+                    : `Đã tìm ra người chiến thắng: ${this.winners
                           .map((winner) => winner.username)
                           .join(', ')}`,
             success: true,
