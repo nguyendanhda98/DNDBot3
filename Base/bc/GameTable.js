@@ -237,6 +237,8 @@ module.exports = class GameTable {
             player.resetInfo()
         })
 
+        this.winners = []
+
         return summary
     }
 
@@ -280,7 +282,7 @@ module.exports = class GameTable {
         })
         this.gameStatus = gameStatus.PENDDING
         this.distributeCardsState = distributeCardsState.NO
-
+        const newWinners = JSON.parse(JSON.stringify(this.winners))
         return {
             message:
                 this.winners.length === 0
@@ -289,7 +291,7 @@ module.exports = class GameTable {
                           .map((winner) => winner.username)
                           .join(', ')}`,
             success: true,
-            winners: this.winners,
+            winners: newWinners,
             playerCards: this.players.map((player) => ({
                 id: player.id,
                 username: player.username,
