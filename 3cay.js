@@ -12,17 +12,17 @@ const user5 = { id: 5, username: 'Da5' }
 gameTableManagement.addGameTable(host, new GameTable(host, 6))
 gameTableManagement.addPlayerInTable(host, host)
 
-console.log(gameTableManagement.getTableGame(host).join(user1))
+console.log(gameTableManagement.getGameTable(host).join(user1))
 gameTableManagement.addPlayerInTable(user1, host)
 ///////////////////////////////////////
 
-console.log(gameTableManagement.getTableGame(host).start(host))
+console.log(gameTableManagement.getGameTable(host).start(host))
 
 console.log(gameTableManagement.getTableJoined(user1).bet(user1, 11))
 
-console.log(gameTableManagement.getTableGame(host).distributeCards(host))
-console.log(gameTableManagement.getTableGame(host).checkWinners(host))
-// console.log(gameTableManagement.getTableGame(host).players)
+console.log(gameTableManagement.getGameTable(host).distributeCards(host))
+console.log(gameTableManagement.getGameTable(host).checkWinners(host))
+// console.log(gameTableManagement.getGameTable(host).players)
 
 cardEmojis = {
     '1c': '823473924',

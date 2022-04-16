@@ -16,7 +16,7 @@ module.exports = class GameTableManagement {
         console.log(this.gameTables)
     }
 
-    getTableGame(host) {
+    getGameTable(host) {
         return this.gameTables[host.id]
     }
 
@@ -33,6 +33,7 @@ module.exports = class GameTableManagement {
     }
 
     removePlayerInTable(user) {
+        console.log('delete ', user)
         delete this.playersInTable[user.id]
     }
 

@@ -68,7 +68,7 @@ module.exports = class GameTable {
 
         if (checkExistUser) {
             return {
-                message: `${user.username} đang tham gia bàn của nhà cái ${this.host.username} rồi.`,
+                message: `${user.username} đang tham gia bàn của nhà cái ${this.host.username} rồi, không cần tham gia lữa.`,
                 success: false,
             }
         }
@@ -94,13 +94,13 @@ module.exports = class GameTable {
         if (this.players.length >= this.maxPlayer) {
             return {
                 message: `${user.username} không thể tham gia bàn của ${this.host.username}, bàn này đã đầy.`,
-                success: true,
+                success: false,
             }
         }
 
         this.players.push(new Player(user.id, user.username))
         return {
-            message: `${user.username} đã tham gia bàn của nhà cái ${this.host.username}`,
+            message: `${user.username} đã tham gia thành công bàn của nhà cái ${this.host.username}`,
             success: true,
         }
     }

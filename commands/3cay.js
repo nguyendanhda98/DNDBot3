@@ -5,7 +5,7 @@ const GameTableManagement = require('../Base/bc/GameTableManagement')
 const gameTableManagement = GameTableManagement.getInstance()
 module.exports = {
     name: '3cay',
-    aliases: [],
+    aliases: ['3c'],
     cooldown: 0,
     permissions: [],
     description: 'choi Ba Cay',
@@ -23,58 +23,83 @@ module.exports = {
         let result = null
         switch (args[0]) {
             case 'info':
-                host = mentions.users.first()
-                if (!host) {
-                    extra = {
-                        setDescription: `Vui lòng nhập 1 nhà cái`,
+                const player = mentions.users.first()
+
+                const checkInfo = (userCheck) => {
+                    gameTable = gameTableManagement.getTableJoined(userCheck)
+
+                    if (!gameTable) {
+                        extra = {
+                            setDescription: `Không tìm thấy thông tin nào`,
+                        }
+
+                        return
                     }
-                    break
+
+                    result = gameTable.getInfo()
+
+                    extra = {
+                        setDescription: result.message,
+                        addFields: [
+                            {
+                                name: 'Nhà cái',
+                                value: result.host.username,
+                                inline: true,
+                            },
+                            {
+                                name: 'Trạng thái',
+                                value: result.gameStatus,
+                                inline: true,
+                            },
+                            {
+                                name: 'Số lượng người chơi',
+                                value: `${result.currentUserNumber}/${result.maxPlayer}`,
+                                inline: true,
+                            },
+                            {
+                                name: 'Người chơi',
+                                value: result.players
+                                    .map(
+                                        (player) =>
+                                            `${player.username} (${player.betAmount})`
+                                    )
+                                    .join('\n'),
+                            },
+                        ],
+                    }
                 }
 
-                gameTable = gameTableManagement.getTableGame(host)
+                if (player) {
+                    checkInfo(player)
+                } else {
+                    gameTable = gameTableManagement.getTableJoined({
+                        id: author.id,
+                        username: author.username,
+                    })
 
-                if (!gameTable) {
-                    extra = {
-                        setDescription: `Không tìm thấy thông tin nào, ${host.username} không phải là nhà cái`,
+                    if (!gameTable) {
+                        const values = []
+                        for (const key in gameTableManagement.gameTables) {
+                            values.push(
+                                `Nhà cái ${gameTableManagement.gameTables[key].host.username} - ${gameTableManagement.gameTables[key].players.length}/${gameTableManagement.gameTables[key].maxPlayer}`
+                            )
+                        }
+
+                        extra = {
+                            setDescription: 'Thông tin các bàn',
+                            addFields: [
+                                {
+                                    name: `Danh sách các nhà cái`,
+                                    value:
+                                        values.length > 0
+                                            ? values.join('\n')
+                                            : 'Không tìm thấy nhà cái nào',
+                                },
+                            ],
+                        }
+                    } else {
+                        checkInfo({ id: author.id, username: author.username })
                     }
-                    break
-                }
-
-                result = gameTable.getInfo()
-
-                extra = {
-                    setDescription: result.message,
-                    addFields: [
-                        {
-                            name: 'Nhà cái',
-                            value: result.host.username,
-                            inline: true,
-                        },
-                        {
-                            name: 'Trạng thái',
-                            value: result.gameStatus,
-                            inline: true,
-                        },
-                        {
-                            name: 'Số lượng người chơi tối đa',
-                            value: `${result.maxPlayer}`,
-                            inline: true,
-                        },
-                        {
-                            name: 'Số lượng người chơi hiện tại',
-                            value: `${result.currentUserNumber}`,
-                            inline: true,
-                        },
-                        {
-                            name: 'Người chơi',
-                            value: result.players
-                                .map(
-                                    (player) =>
-                                        `${player.username} (${player.betAmount})`
-                                )
-                                .join('\n'),
-                        },
-                    ],
                 }
 
                 break
@@ -120,7 +145,7 @@ module.exports = {
                     break
                 }
 
-                gameTable = gameTableManagement.getTableGame(host)
+                gameTable = gameTableManagement.getGameTable(host)
 
                 if (!gameTable) {
                     extra = {
@@ -130,10 +155,15 @@ module.exports = {
                 }
 
                 result = gameTable.join(author)
-                gameTableManagement.addPlayerInTable(author, host)
+
+                if (result.success) {
+                    gameTableManagement.addPlayerInTable(author, host)
+                }
+
                 extra = {
                     setDescription: result.message,
                 }
+
                 break
             case 'leave':
                 gameTable = gameTableManagement.getTableJoined(author)
@@ -151,6 +181,7 @@ module.exports = {
                         gameTableManagement.removePlayerInTable(player)
                     })
                     gameTableManagement.removeTable(author)
+
                     extra = {
                         setDescription: `Bàn đã bị hủy do nhà cái ${author.username} đã ôm tiền chạy mất, thật quá đáng.`,
                     }
@@ -163,8 +194,6 @@ module.exports = {
                     }
                     break
                 }
-            case 'kick':
-                break
             case 'ready':
                 host = { id: author.id, username: author.username }
                 gameTable = gameTableManagement.getTableJoined(host)
@@ -235,8 +264,7 @@ module.exports = {
                 }
                 console.log(result.summary)
                 break
-
-            case 'kick':
+            case 'deny':
                 host = { id: author.id, username: author.username }
                 const userBeKick = {
                     id: mentions.users.first().id,
@@ -253,11 +281,13 @@ module.exports = {
                 }
 
                 result = gameTable.kick(host, userBeKick)
+
                 extra = {
                     setDescription: result.message,
                 }
-
+                console.log('xxxxxxxxxxxxx', result)
                 if (result.success) {
+                    console.log('vao day')
                     gameTableManagement.removePlayerInTable(userBeKick)
                 }
 
@@ -285,6 +315,17 @@ module.exports = {
                     setDescription: result.message,
                 }
 
+                break
+            case 'check':
+                gameTable = gameTableManagement.getGameTable({ id: author.id })
+                console.log('players', gameTable.players)
+                console.log('players', gameTable.players)
+                console.log('blackList', gameTable.blackList)
+                console.log('gameTables', gameTableManagement.gameTables)
+                console.log(
+                    'playersInTable',
+                    gameTableManagement.playersInTable
+                )
                 break
             default:
                 const amount = args[0]
