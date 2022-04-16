@@ -254,15 +254,39 @@ module.exports = {
                 }
 
                 result = gameTable.checkWinners(host)
-                const addFields = result.playerCards.map((playerCard) => ({
-                    name: playerCard.username,
-                    value: playerCard.cards.join(' '),
-                    inline: true,
-                }))
+
                 extra = {
-                    setDescription: result.message,
-                    addFields,
+                    setDescription: 'Người chiến thắng là: ...',
+                    addFields: result.playerCards.map((playerCard) => ({
+                        name: playerCard.username,
+                        value: playerCard.getShowCards(0).join(' '),
+                        inline: true,
+                    })),
                 }
+
+                const getStartEditEmbed = (numberCard) => {
+                    extra.addFields = result.playerCards.map((playerCard) => ({
+                        name: playerCard.username,
+                        value: playerCard.getShowCards(numberCard).join(' '),
+                        inline: true,
+                    }))
+
+                    response.edit({
+                        embeds: [messageEmbed(message, discord, extra)],
+                    })
+                }
+
+                setTimeout(() => {
+                    getStartEditEmbed(1)
+                    setTimeout(() => {
+                        getStartEditEmbed(2)
+                        setTimeout(() => {
+                            extra.setDescription = `Người chiến thắng là: ${result.message}`
+                            getStartEditEmbed(3)
+                        }, 3000)
+                    }, 2000)
+                }, 1000)
+
                 console.log(result.summary)
                 break
             case 'deny':
@@ -358,24 +382,48 @@ module.exports = {
                         message: checkWinnersMessage,
                     } = game.checkWinners(host)
 
+                    // extra = {
+                    //     setDescription: `Người chiến thắng là: ...`,
+                    //     addFields: playerCards.map((player) => ({
+                    //         name: player.username,
+                    //         value: `${player.getShowCards(0).join(' ')}`,
+                    //         inline: true,
+                    //     })),
+                    // }
+
                     extra = {
                         setDescription: `Người chiến thắng là: ...`,
-                        addFields: playerCards.map((player) => ({
-                            name: player.username,
-                            value: `${player.getShowCards(0).join(' ')}`,
-                            inline: true,
-                        })),
+                        addFields: [
+                            {
+                                name: playerCards[1].username,
+                                value: `${playerCards[1]
+                                    .getShowCards(0)
+                                    .join(' ')}`,
+                                inline: true,
+                            },
+                            {
+                                name: playerCards[0].username,
+                                value: `${playerCards[0].cards.join(' ')}`,
+                                inline: true,
+                            },
+                        ],
                     }
 
                     const getEditEmbed = (numberCard) => {
-                        extra.addFields = playerCards.map((player) => ({
-                            name: player.username,
-                            value: `${player
-                                .getShowCards(numberCard)
-                                .join(' ')}`,
-                            inline: true,
-                        }))
-
+                        extra.addFields = [
+                            {
+                                name: playerCards[1].username,
+                                value: `${playerCards[1]
+                                    .getShowCards(numberCard)
+                                    .join(' ')}`,
+                                inline: true,
+                            },
+                            {
+                                name: playerCards[0].username,
+                                value: `${playerCards[0].cards.join(' ')}`,
+                                inline: true,
+                            },
+                        ]
                         response.edit({
                             embeds: [messageEmbed(message, discord, extra)],
                         })
