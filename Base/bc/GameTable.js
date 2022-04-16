@@ -10,6 +10,7 @@ module.exports = class GameTable {
     cardsExist = []
     winners = []
     distributeCardsState = distributeCardsState.NO
+    blackList = []
     constructor(host, maxPlayer = 12) {
         const newHost = new Player(host.id, host.username)
         this.host = newHost
@@ -303,6 +304,82 @@ module.exports = class GameTable {
                 cards: player.getCards(),
             })),
             summary: this._getSummary(),
+        }
+    }
+
+    kick(host, user) {
+        if (host.id !== this.host.id) {
+            return {
+                message: `Không thể đá vào đít ${user.username}, ${host.username} không phải là nhà cái.`,
+                success: false,
+            }
+        }
+
+        if (user.id === this.host.id) {
+            return {
+                message: `Nhà cái  ${host.username} không thể tự đá đít chính mình.`,
+                success: false,
+            }
+        }
+
+        let playerIndex = -1
+        this.players.find((player, index) => {
+            if (player.id === user.id) {
+                playerIndex = index
+                return player
+            }
+        })
+
+        if (playerIndex === -1) {
+            return {
+                message: `Không thể đá vào đít ${user.username}, ${user.username} không ở trong bàn của ${host.username}.`,
+                success: false,
+            }
+        }
+
+        this.players.splice(playerIndex, 1)
+        this.blackList.push(user)
+
+        return {
+            message: `Nhà cái ${host.username} đã đá đít ${user.username} ra khỏi bàn, cay thế nhờ.`,
+            success: true,
+        }
+    }
+
+    allow(host, user) {
+        if (host.id !== this.host.id) {
+            return {
+                message: `Không thể thao tác, ${host.username} không phải là nhà cái.`,
+                success: false,
+            }
+        }
+
+        if (user.id === this.host.id) {
+            return {
+                message: `Nhà cái  ${host.username} không thể tự allow chính mình.`,
+                success: false,
+            }
+        }
+
+        let playerIndex = -1
+        this.blackList.find((player, index) => {
+            if (player.id === user.id) {
+                playerIndex = index
+                return player
+            }
+        })
+
+        if (playerIndex === -1) {
+            return {
+                message: `Thao tác thất bại, ${user.username} không có ở trong blacklist`,
+                success: false,
+            }
+        }
+
+        this.blackList.splice(playerIndex, 1)
+        return {
+            message: `Nhà cái ${host.username} đã cho phép ${user.username} quay trở lại bàn, hãy tham gia lại đi nào`,
+            success: true,
         }
     }
 }

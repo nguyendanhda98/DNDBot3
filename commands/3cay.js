@@ -108,7 +108,7 @@ module.exports = {
                         setDescription:
                             checkJoined.host.id === host.id
                                 ? `${author.username} đang ở trong bàn của nhà cái ${checkJoined.host.username}`
-                                : `Tham gia bàn không thành công, bạn đang ở trong bàn của nhà cái ${checkJoined.host.username}`,
+                                : `Tham gia bàn không thành công, ${author.username} đang ở trong bàn của nhà cái ${checkJoined.host.username}`,
                     }
                     break
                 }
@@ -152,7 +152,7 @@ module.exports = {
                     })
                     gameTableManagement.removeTable(author)
                     extra = {
-                        setDescription: `Bàn đã bị hủy do nhà cái ${author.username} đã ôm tiền chạy mất.`,
+                        setDescription: `Bàn đã bị hủy do nhà cái ${author.username} đã ôm tiền chạy mất, thật quá đáng.`,
                     }
                     break
                 } else {
@@ -234,6 +234,33 @@ module.exports = {
                     addFields,
                 }
                 console.log(result.summary)
+                break
+
+            case 'kick':
+                host = { id: author.id, username: author.username }
+                const userBeKick = {
+                    id: mentions.users.first().id,
+                    username: mentions.users.first().username,
+                }
+
+                gameTable = gameTableManagement.getTableJoined(host)
+
+                if (!gameTable) {
+                    extra = {
+                        setDescription: `Đá đít thất bại, ${author.username} chưa trở thành nhà cái.`,
+                    }
+                    break
+                }
+
+                result = game.kick(host, userBeKick)
+                extra = {
+                    setDescription: result.message,
+                }
+
+                if (result.success) {
+                    gameTableManagement.removePlayerInTable(userBeKick)
+                }
+
                 break
             default:
                 const amount = args[0]
