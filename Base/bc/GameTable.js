@@ -264,7 +264,7 @@ module.exports = class GameTable {
             player.showAmount =
                 (player.amount >= 0
                     ? `+${player.amount}`
-                    : `${player.amount}`) + ` ${process.env.COIN_EMOJI}`
+                    : `${player.amount}`) + ` ${process.env.DND_EMOJI}`
             return {
                 id: player.id,
                 username: player.username,

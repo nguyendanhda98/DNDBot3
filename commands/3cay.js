@@ -3,7 +3,7 @@ const GameTable = require('../Base/bc/GameTable')
 const GameTableManagement = require('../Base/bc/GameTableManagement')
 const { updateUser } = require('../services/profile')
 const gameTableManagement = GameTableManagement.getInstance()
-
+const dndEmoji = process.env.DND_EMOJI;
 module.exports = {
     name: '3cay',
     aliases: ['3c'],

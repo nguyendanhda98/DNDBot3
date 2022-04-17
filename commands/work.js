@@ -3,7 +3,7 @@ const messageEmbed = require("../util/messageEmbed");
 module.exports = {
   name: "work",
   aliases: ["w"],
-  cooldown: 0,
+  cooldown: 30,
   permissions: [],
   description: "work for DND",
   async execute(message, args, cmd, client, discord, profileData) {
