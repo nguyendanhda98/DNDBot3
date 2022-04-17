@@ -1,8 +1,8 @@
 const profileModel = require('../models/profileSchema');
 const messageEmbed = require('../util/messageEmbed');
 module.exports = {
-  name: 'add-money',
-  aliases: ['am'],
+  name: 'sub-money',
+  aliases: ['sm'],
   permissions: [],
   description: 'give a player some coins',
   async execute(message, args, cmd, client, discord, profileData) {
@@ -39,13 +39,13 @@ module.exports = {
             },
             {
               $inc: {
-                cash: amount,
+                cash: -amount,
               },
             }
           );
 
           extra = {
-            setDescription: `Đã cộng ${amount} DND cho ${
+            setDescription: `Đã trừ ${amount} DND của ${
               message.mentions.users.first().tag
             }`,
           };
