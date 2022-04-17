@@ -403,4 +403,11 @@ module.exports = class GameTable {
             success: true,
         }
     }
+
+    getTotalBetAmount() {
+        return this.players.reduce(
+            (totalBet, player) => totalBet + player.betAmount,
+            0
+        )
+    }
 }
