@@ -4,7 +4,7 @@ const { updateUser } = require('../services/profile');
 module.exports = {
   name: 'work',
   aliases: ['w'],
-  cooldown: 30,
+  cooldown: 0,
   permissions: [],
   description: 'work for DND',
   async execute(message, args, cmd, client, discord, profileData) {
