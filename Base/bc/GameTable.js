@@ -260,10 +260,20 @@ module.exports = class GameTable {
             }
         })
 
-        const summary = this.players.map((player) => ({
-            id: player.id,
-            amount: player.amount,
-        }))
+        const summary = this.players.map((player) => {
+            player.showAmount =
+                (player.amount >= 0
+                    ? `+${player.amount}`
+                    : `${player.amount}`) + ` ${process.env.COIN_EMOJI}`
+            return {
+                id: player.id,
+                username: player.username,
+                amount: player.amount,
+                cards: player.getCards(),
+                getShowCards: player.getShowCard.bind(player),
+                showAmount: player.showAmount,
+            }
+        })
 
         return summary
     }
@@ -318,14 +328,7 @@ module.exports = class GameTable {
                           .join(', ')}`,
             success: true,
             winners: newWinners,
-            playerCards: this.players.map((player) => ({
-                id: player.id,
-                username: player.username,
-                cards: player.getCards(),
-                getShowCards: player.getShowCard.bind(player),
-                amount: player.amount,
-            })),
-            summary: this._getSummary(),
+            playersInfo: this._getSummary(),
         }
     }
 

@@ -12,6 +12,7 @@ module.exports = {
     description: 'choi Ba Cay',
 
     async execute(message, args, cmd, client, discord, profileData) {
+        let response
         var extra = {}
 
         const { author, mentions } = message
@@ -267,7 +268,7 @@ module.exports = {
 
                 extra = {
                     setDescription: 'Người chiến thắng là: ...',
-                    addFields: result.playerCards.map((playerCard) => ({
+                    addFields: result.playersInfo.map((playerCard) => ({
                         name: playerCard.username,
                         value: playerCard.getShowCards(0).join(' '),
                         inline: true,
@@ -275,9 +276,9 @@ module.exports = {
                 }
 
                 const getStartEditEmbed = (numberCard, showAmount = false) => {
-                    extra.addFields = result.playerCards.map((playerCard) => ({
+                    extra.addFields = result.playersInfo.map((playerCard) => ({
                         name: `${playerCard.username}${
-                            showAmount ? `\n${playerCard.amount} DND` : ''
+                            showAmount ? `\n${playerCard.showAmount}` : ''
                         }`,
                         value: playerCard.getShowCards(numberCard).join(' '),
                         inline: true,
@@ -299,7 +300,7 @@ module.exports = {
                     }, 2000)
                 }, 1000)
 
-                result.summary.forEach(
+                result.playersInfo.forEach(
                     async (player) =>
                         await updateUser(player.id, { cash: player.amount })
                 )
@@ -400,13 +401,13 @@ module.exports = {
                     game.distributeCards(host)
                     const {
                         winners,
-                        playerCards,
+                        playersInfo,
                         message: checkWinnersMessage,
                     } = game.checkWinners(host)
 
                     // extra = {
                     //     setDescription: `Người chiến thắng là: ...`,
-                    //     addFields: playerCards.map((player) => ({
+                    //     addFields: playersInfo.map((player) => ({
                     //         name: player.username,
                     //         value: `${player.getShowCards(0).join(' ')}`,
                     //         inline: true,
@@ -417,15 +418,15 @@ module.exports = {
                         setDescription: `Người chiến thắng là: ...`,
                         addFields: [
                             {
-                                name: playerCards[1].username,
-                                value: `${playerCards[1]
+                                name: playersInfo[1].username,
+                                value: `${playersInfo[1]
                                     .getShowCards(0)
                                     .join(' ')}`,
                                 inline: true,
                             },
                             {
-                                name: playerCards[0].username,
-                                value: `${playerCards[0].cards.join(' ')}`,
+                                name: playersInfo[0].username,
+                                value: `${playersInfo[0].cards.join(' ')}`,
                                 inline: true,
                             },
                         ],
@@ -434,24 +435,24 @@ module.exports = {
                     const getEditEmbed = (numberCard, showAmount = false) => {
                         extra.addFields = [
                             {
-                                name: `${playerCards[1].username}${
+                                name: `${playersInfo[1].username}${
                                     showAmount
-                                        ? `\n${playerCards[1].amount} DND`
+                                        ? `\n${playersInfo[1].showAmount}`
                                         : ''
                                 }`,
 
-                                value: `${playerCards[1]
+                                value: `${playersInfo[1]
                                     .getShowCards(numberCard)
                                     .join(' ')}`,
                                 inline: true,
                             },
                             {
-                                name: `${playerCards[0].username}${
+                                name: `${playersInfo[0].username}${
                                     showAmount
-                                        ? `\n${-1 * playerCards[1].amount} DND`
+                                        ? `\n${playersInfo[0].showAmount}`
                                         : ''
                                 }`,
-                                value: `${playerCards[0].cards.join(' ')}`,
+                                value: `${playersInfo[0].cards.join(' ')}`,
                                 inline: true,
                             },
                         ]
@@ -483,6 +484,6 @@ module.exports = {
         }
 
         const newEmbed = messageEmbed(message, discord, extra)
-        let response = await message.channel.send({ embeds: [newEmbed] })
+        response = await message.channel.send({ embeds: [newEmbed] })
     },
 }
