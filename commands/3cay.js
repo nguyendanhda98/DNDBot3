@@ -3,7 +3,7 @@ const GameTable = require('../Base/bc/GameTable')
 const GameTableManagement = require('../Base/bc/GameTableManagement')
 const { updateUser } = require('../services/profile')
 const gameTableManagement = GameTableManagement.getInstance()
-const dndEmoji = process.env.DND_EMOJI;
+const dndEmoji = process.env.DND_EMOJI
 module.exports = {
     name: '3cay',
     aliases: ['3c'],
@@ -294,8 +294,11 @@ module.exports = {
                     setTimeout(() => {
                         getStartEditEmbed(2)
                         setTimeout(() => {
-                            extra.setDescription = `Người chiến thắng là: ${result.message}`
-                            getStartEditEmbed(3, true)
+                            getStartEditEmbed(3)
+                            setTimeout(() => {
+                                extra.setDescription = `Người chiến thắng là: ${result.message}`
+                                getStartEditEmbed(3, true)
+                            }, 2000)
                         }, 3000)
                     }, 2000)
                 }, 1000)
@@ -466,8 +469,11 @@ module.exports = {
                         setTimeout(() => {
                             getEditEmbed(2)
                             setTimeout(() => {
-                                extra.setDescription = `Người chiến thắng là: ${checkWinnersMessage}`
-                                getEditEmbed(3, true)
+                                getEditEmbed(3)
+                                setTimeout(() => {
+                                    extra.setDescription = `Người chiến thắng là: ${checkWinnersMessage}`
+                                    getEditEmbed(3, true)
+                                }, 2000)
                             }, 3000)
                         }, 2000)
                     }, 1000)
