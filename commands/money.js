@@ -1,5 +1,4 @@
 const messageEmbed = require("../util/messageEmbed");
-
 module.exports = {
   name: "money",
   aliases: [],

@@ -1,23 +1,17 @@
-const profileModel = require("../models/profileSchema");
-const messageEmbed = require("../util/messageEmbed");
+const profileModel = require('../models/profileSchema');
+const messageEmbed = require('../util/messageEmbed');
+const { updateUser } = require('../services/profile');
 module.exports = {
-  name: "work",
-  aliases: ["w"],
+  name: 'work',
+  aliases: ['w'],
   cooldown: 30,
   permissions: [],
-  description: "work for DND",
+  description: 'work for DND',
   async execute(message, args, cmd, client, discord, profileData) {
     const randomNumber = Math.floor(Math.random() * 6) + 1;
-    const response = await profileModel.findOneAndUpdate(
-      {
-        userID: message.author.id,
-      },
-      {
-        $inc: {
-          cash: randomNumber,
-        },
-      }
-    );
+    await updateUser(message.author.id, {
+      cash: randomNumber,
+    });
 
     const extra = {
       setDescription: `Bạn đã làm việc rất chăm chỉ và nhận được **${randomNumber} DND**`,
