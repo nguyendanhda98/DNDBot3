@@ -323,6 +323,7 @@ module.exports = class GameTable {
                 username: player.username,
                 cards: player.getCards(),
                 getShowCards: player.getShowCard.bind(player),
+                amount: player.amount,
             })),
             summary: this._getSummary(),
         }
