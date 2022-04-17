@@ -6,17 +6,14 @@ module.exports = class Player {
     cards = []
     highestCard = null
     betAmount = 0
-    amonunt = 0
+    amount = 0
     constructor(userId, username) {
         this.id = userId
         this.username = username
     }
 
     getShowCard(cardIndex) {
-        console.log(cardIndex)
-        console.log(this.cards)
         const cards = []
-        console.log('xyyyyyyyyyyyy', this.cards)
         for (let index = 0; index < 3; index++) {
             if (index < cardIndex) {
                 cards.push(this.cards[index])
@@ -31,7 +28,7 @@ module.exports = class Player {
     resetInfo() {
         this.cards = []
         this.highestCard = null
-        this.amonunt = 0
+        this.amount = 0
     }
 
     addCard(card) {
@@ -44,13 +41,12 @@ module.exports = class Player {
             this.highestCard = card
         } else {
             this.highestCard =
-                card.cardNumber === 1
+                (card.cardNumber === 1
                     ? 10 + card.cardType
-                    : card.cardNumber + card.cardType >
-                          this.highestCard.cardNumber ===
-                      1
+                    : card.cardNumber + card.cardType) >
+                (this.highestCard.cardNumber === 1
                     ? 10 + this.highestCard.cardType
-                    : this.highestCard.cardNumber + this.highestCard.cardType
+                    : this.highestCard.cardNumber + this.highestCard.cardType)
                     ? card
                     : this.highestCard
         }

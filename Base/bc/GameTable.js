@@ -238,6 +238,17 @@ module.exports = class GameTable {
         this._takeCard()
         this._takeCard()
 
+        // const da = this.players[0]
+        // const thinh = this.players[1]
+
+        // da.addCard(new Card(20, 4))
+        // da.addCard(new Card(40, 9))
+        // da.addCard(new Card(10, 4))
+
+        // thinh.addCard(new Card(40, 4))
+        // thinh.addCard(new Card(30, 6))
+        // thinh.addCard(new Card(30, 7))
+
         this.distributeCardsState = distributeCardsState.YES
         return { message: 'Nhà cái đã chia bài xong', success: true }
     }
@@ -245,13 +256,13 @@ module.exports = class GameTable {
     _getSummary() {
         this.players.forEach((player) => {
             if (player.id !== this.host) {
-                this.host.amonunt += player.amonunt * -1
+                this.host.amount += player.amount * -1
             }
         })
 
         const summary = this.players.map((player) => ({
             id: player.id,
-            amonunt: player.amonunt,
+            amount: player.amount,
         }))
 
         return summary
@@ -281,17 +292,17 @@ module.exports = class GameTable {
         this.players.forEach((player) => {
             if (player.id !== this.host.id) {
                 if (player.getPoint() > this.host.getPoint()) {
-                    player.amonunt = player.betAmount
+                    player.amount = player.betAmount
                     this.winners.push(player)
                 } else if (player.getPoint() === this.host.getPoint()) {
                     if (player.getTypePoint() > this.host.getTypePoint()) {
-                        player.amonunt = player.betAmount
+                        player.amount = player.betAmount
                         this.winners.push(player)
                     } else {
-                        player.amonunt = player.betAmount * -1
+                        player.amount = player.betAmount * -1
                     }
                 } else {
-                    player.amonunt = player.betAmount * -1
+                    player.amount = player.betAmount * -1
                 }
             }
         })
