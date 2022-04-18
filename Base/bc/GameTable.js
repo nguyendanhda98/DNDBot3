@@ -1,7 +1,7 @@
 const { gameStatus, distributeCardsState } = require('../../util/constant')
 const Card = require('./Card')
 const Player = require('./Player')
-
+const dndEmoji = process.env.DND_EMOJI
 module.exports = class GameTable {
     host = null
     players = []
@@ -184,7 +184,7 @@ module.exports = class GameTable {
         player.betAmount = value
 
         return {
-            message: `${player.username} vừa cược ${value} vào bàn của nhà cái ${this.host.username} DND`,
+            message: `${player.username} vừa cược ${value} ${dndEmoji} vào bàn của nhà cái ${this.host.username}`,
             success: true,
         }
     }
