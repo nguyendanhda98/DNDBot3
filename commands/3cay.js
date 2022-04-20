@@ -206,6 +206,10 @@ module.exports = {
                 }
                 break
             case 'bet': // bet <So tien>
+                if (args[1] === 'all') {
+                    args[1] = profileData.cash
+                }
+
                 if (+args[1] % 1 != 0 || +args[1] <= 0) {
                     extra = {
                         setDescription: `Số DND ${dndEmoji} không hợp lệ!`,
@@ -230,7 +234,10 @@ module.exports = {
 
                 result = gameTable.bet(author, +args[1])
                 extra = {
-                    setDescription: result.message,
+                    setDescription:
+                        +args[1] === profileData.cash
+                            ? `${author.username} vừa all in ${profileData.cash} ${dndEmoji} vào bàn của nhà cái ${this.host.username}, hảo hán .... HẢO HÁNNNNNN`
+                            : result.message,
                 }
                 break
             case 'start':
