@@ -1,16 +1,18 @@
-const messageEmbed = require("../util/messageEmbed");
-
+const messageEmbed = require('../util/messageEmbed');
+const newGame = require('../Base/newGame');
 module.exports = {
-  name: 'ping',
-  aliases: ['ping1', 'ping2', 'ping3'],
-  cooldown: 10,
+  name: 'baucua',
+  aliases: ['bc'],
+  cooldown: 0,
   // permissions: ["ADMINISTRATOR", "MANAGE_MESSAGES", "CONNECT"],
   permissions: [],
-  description: 'this is a ping command!',
-  async execute(message, args, cmd, client, discord, profileData) {
+  description: 'bau cua tom ca huou ga',
+  execute(message, args, cmd, client, discord, profileData) {
     var extra = {};
     extra.setDescription = 'pong!';
-    // message.channel.send('pong!');
+
+    newGame(args);
+
     const newEmbed = messageEmbed(message, discord, extra);
     message.channel.send({ embeds: [newEmbed] });
   },
