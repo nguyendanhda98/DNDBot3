@@ -1,5 +1,5 @@
 const messageEmbed = require('../util/messageEmbed');
-const newGame = require('../Base/newGame');
+const newGame = require('../Base/baucua/newGame');
 module.exports = {
   name: 'baucua',
   aliases: ['bc'],

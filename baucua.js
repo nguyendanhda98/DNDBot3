@@ -2,10 +2,6 @@ const player = require('./Base/baucua/player');
 const game = require('./Base/baucua/game');
 const gameInfoGlobal = require('./Base/baucua/gameInfoGlobal');
 
-const x1 = Math.ceil(Math.random() * 6);
-const x2 = Math.ceil(Math.random() * 6);
-const x3 = Math.ceil(Math.random() * 6);
-
 // const x1 = 1;
 // const x2 = 1;
 // const x3 = 1;
@@ -18,13 +14,25 @@ let player3 = new player(3);
 
 player1.newGame();
 let newGame = new game(player1.getID());
-console.log(newGame);
 
 gameGlobal.push(player1.getID());
-console.log(gameGlobal);
 
 player2.joinGame(player1.getID());
-newGame.join(player2.getID());
-console.log(newGame);
+newGame.join(player2);
+player2.bet([
+  { name: 1, amount: 1 },
+  { name: 2, amount: 1 },
+  { name: 3, amount: 1 },
+]);
+
+player3.joinGame(player1.getID());
+newGame.join(player3);
+player3.bet([
+  { name: 4, amount: 1 },
+  { name: 5, amount: 1 },
+  { name: 6, amount: 1 },
+]);
+
+newGame.start();
 
 //leave: if host player leave is true, gameGlobal delete id ban

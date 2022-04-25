@@ -36,7 +36,7 @@ module.exports = class player {
       this.playing = id;
     }
   }
-  
+
   leaveGame() {
     if (this.playing == 0 && this.host == 0) {
       console.log('Bạn chưa tham gia bàn nào');
@@ -51,6 +51,6 @@ module.exports = class player {
     }
   }
   bet(arr) {
-    console.log(arr);
+    this.bets = arr;
   }
 };
