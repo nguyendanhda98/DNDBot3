@@ -1,15 +1,15 @@
-const fs = require("fs");
+import { readdirSync } from 'fs';
 
-module.exports = (client, Discord) => {
-  const command_files = fs
-    .readdirSync("./commands/")
-    .filter((file) => file.endsWith(".js"));
+export default function (client, Discord) {
+  const command_files = readdirSync('./src/commands/').filter((file) =>
+    file.endsWith('.js')
+  );
+
   for (const file of command_files) {
-    const command = require(`../commands/${file}`);
-    if (command.name) {
-      client.commands.set(command.name, command);
-    } else {
-      continue;
-    }
+    import(`../commands/${file}`).then((command) => {
+      if (command.name) {
+        client.commands.set(command.name, command);
+      }
+    });
   }
-};
+}

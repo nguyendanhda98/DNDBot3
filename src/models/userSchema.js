@@ -13,4 +13,7 @@ export default class userSchema {
   updateBank(bank) {
     this.bank += bank;
   }
+  findOne(obj) {
+    console.log('ok ne');
+  }
 }

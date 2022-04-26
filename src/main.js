@@ -1,3 +1,5 @@
+'use strict';
+
 import Discord, { Collection } from 'discord.js';
 import { Client, Intents } from 'discord.js';
 import 'dotenv/config';
@@ -10,9 +12,10 @@ const client = new Client({
 client.commands = new Collection();
 client.events = new Collection();
 
-// ['command_handler', 'event_handler'].forEach((handler) => {
-//   require(`./handlers/${handler}`)(client, Discord);
-// })
-console.log(dotenv.config());
+['command_handler', 'event_handler'].forEach((handler) => {
+  import(`./handlers/${handler}.js`).then((module) => {
+    module.default(client, Discord);
+  });
+});
 
-// client.login(token);
+ client.login(token);
