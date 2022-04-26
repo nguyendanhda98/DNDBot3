@@ -1,4 +1,4 @@
-module.exports = class gameInfoGlobal {
+export default class gameInfoGlobal {
   constructor() {
     this.id = [];
   }

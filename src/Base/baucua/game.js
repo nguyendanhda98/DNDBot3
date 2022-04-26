@@ -1,4 +1,4 @@
-module.exports = class Game {
+export default class Game {
   constructor(idHost, maxPlayer = false) {
     this.host = idHost;
     this.maxPlayer = maxPlayer;

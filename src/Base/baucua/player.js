@@ -1,6 +1,4 @@
-const game = require('../baucua/game');
-
-module.exports = class player {
+export default class player {
   constructor(id) {
     this.id = id;
     this.host = false;
@@ -53,4 +51,4 @@ module.exports = class player {
   bet(arr) {
     this.bets = arr;
   }
-};
+}

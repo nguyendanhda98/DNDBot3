@@ -1,6 +1,6 @@
-const profileModel = require('../models/profileSchema');
+const userSchema = require('../models/userSchema');
 const messageEmbed = require('../util/messageEmbed');
-const { updateUser } = require('../services/profile');
+
 module.exports = {
   name: 'work',
   aliases: ['w'],

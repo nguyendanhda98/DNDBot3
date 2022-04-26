@@ -1,0 +1,8 @@
+{
+  "posts": [
+    { "name": "hello1 world" },
+    { "name": "hello world2" },
+    { "name": "hello world3" },
+    { "name": "hello4 world" }
+  ]
+}
