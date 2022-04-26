@@ -18,4 +18,4 @@ client.events = new Collection();
   });
 });
 
- client.login(token);
+  client.login(token);

@@ -1,4 +1,4 @@
-module.exports = (message, discord, extra) => {
+export default (message, discord, extra) => {
   const {
     setColor,
     setTitle,

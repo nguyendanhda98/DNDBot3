@@ -1,5 +1,6 @@
 export default class userSchema {
-  constructor(userName, userID, serverID, cash = 0, bank = 0) {
+  constructor(tag, userName, userID, serverID, cash = 0, bank = 0) {
+    this.tag = tag;
     this.userName = userName;
     this.userID = userID;
     this.serverID = serverID;
@@ -13,7 +14,5 @@ export default class userSchema {
   updateBank(bank) {
     this.bank += bank;
   }
-  findOne(obj) {
-    console.log('ok ne');
-  }
+
 }

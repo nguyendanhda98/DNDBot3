@@ -1,5 +1,5 @@
 import 'dotenv/config';
-
+import { create, findOne } from '../../repo/database.js';
 import userSchema from '../../models/userSchema.js';
 
 //create cooldowns map
@@ -8,118 +8,118 @@ const prefix = process.env.PREFIX;
 
 export default async (Discord, client, message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
-  // console.log(userSchema.findOne());
-  //let profileData;
-  //
-  //profileData = await findOne({ userID: message.author.id });
-  // if (!profileData) {
-  //   let profile = await create({
-  //     userID: message.author.id,
-  //     serverID: message.guild.id,
-  //     cash: 0,
-  //     bank: 0,
-  //   });
-  //   profile.save();
-  return message.channel.send(
-    `Cảm ơn bạn đã sử dụng Bot. Chúc bạn có một khoảng thời gian vui vẻ`
-  );
-  // }
 
-  // const args = message.content.slice(prefix.length).split(/ +/);
-  // const cmd = args.shift().toLowerCase();
+  let profileData = await findOne({ userID: message.author.id });
+  if (!profileData) {
+    let profile = new userSchema(
+      message.author.tag,
+      message.author.username,
+      message.author.id,
+      message.guild.id
+    );
+    create(profile);
 
-  // const command =
-  //   client.commands.get(cmd) ||
-  //   client.commands.find((a) => a.aliases && a.aliases.includes(cmd));
+    return message.channel.send(
+      `Đây là lần đầu tiên bạn sử dụng Bot nhỉ. Cảm ơn bạn đã sử dụng Bot nha. Chúc bạn có một khoảng thời gian vui vẻ`
+    );
+  }
 
-  // if (!command) {
-  //   return message.channel.send(`Câu lệnh \`${cmd}\` không tồn tại!`);
-  // }
+  const args = message.content.slice(prefix.length).split(/ +/);
+  const cmd = args.shift().toLowerCase();
 
-  // // In your command.js event file.
-  // const validPermissions = [
-  //   'CREATE_INSTANT_INVITE',
-  //   'KICK_MEMBERS',
-  //   'BAN_MEMBERS',
-  //   'ADMINISTRATOR',
-  //   'MANAGE_CHANNELS',
-  //   'MANAGE_GUILD',
-  //   'ADD_REACTIONS',
-  //   'VIEW_AUDIT_LOG',
-  //   'PRIORITY_SPEAKER',
-  //   'STREAM',
-  //   'VIEW_CHANNEL',
-  //   'SEND_MESSAGES',
-  //   'SEND_TTS_MESSAGES',
-  //   'MANAGE_MESSAGES',
-  //   'EMBED_LINKS',
-  //   'ATTACH_FILES',
-  //   'READ_MESSAGE_HISTORY',
-  //   'MENTION_EVERYONE',
-  //   'USE_EXTERNAL_EMOJIS',
-  //   'VIEW_GUILD_INSIGHTS',
-  //   'CONNECT',
-  //   'SPEAK',
-  //   'MUTE_MEMBERS',
-  //   'DEAFEN_MEMBERS',
-  //   'MOVE_MEMBERS',
-  //   'USE_VAD',
-  //   'CHANGE_NICKNAME',
-  //   'MANAGE_NICKNAMES',
-  //   'MANAGE_ROLES',
-  //   'MANAGE_WEBHOOKS',
-  //   'MANAGE_EMOJIS',
-  // ];
+  const command =
+    client.commands.get(cmd) ||
+    client.commands.find((a) => a.aliases && a.aliases.includes(cmd));
 
-  // if (command.permissions.length) {
-  //   let invalidPerms = [];
-  //   for (const perm of command.permissions) {
-  //     if (!validPermissions.includes(perm)) {
-  //       return console.log(`Invalid Permissions ${perm}`);
-  //     }
-  //     if (!message.member.permissions.has(perm)) {
-  //       invalidPerms.push(perm);
-  //     }
-  //   }
-  //   if (invalidPerms.length) {
-  //     return message.channel.send(`Missing Permissions: \`${invalidPerms}\``);
-  //   }
-  // }
+  if (!command) {
+    console.log(profileData);
+    return message.channel.send(`Câu lệnh \`d.${cmd}\` không tồn tại!`);
+  }
 
-  // //If cooldowns map doesn't have a command.name key then create one.
-  // if (!cooldowns.has(command.name)) {
-  //   cooldowns.set(command.name, new Discord.Collection());
-  // }
+  // In your command.js event file.
+  const validPermissions = [
+    'CREATE_INSTANT_INVITE',
+    'KICK_MEMBERS',
+    'BAN_MEMBERS',
+    'ADMINISTRATOR',
+    'MANAGE_CHANNELS',
+    'MANAGE_GUILD',
+    'ADD_REACTIONS',
+    'VIEW_AUDIT_LOG',
+    'PRIORITY_SPEAKER',
+    'STREAM',
+    'VIEW_CHANNEL',
+    'SEND_MESSAGES',
+    'SEND_TTS_MESSAGES',
+    'MANAGE_MESSAGES',
+    'EMBED_LINKS',
+    'ATTACH_FILES',
+    'READ_MESSAGE_HISTORY',
+    'MENTION_EVERYONE',
+    'USE_EXTERNAL_EMOJIS',
+    'VIEW_GUILD_INSIGHTS',
+    'CONNECT',
+    'SPEAK',
+    'MUTE_MEMBERS',
+    'DEAFEN_MEMBERS',
+    'MOVE_MEMBERS',
+    'USE_VAD',
+    'CHANGE_NICKNAME',
+    'MANAGE_NICKNAMES',
+    'MANAGE_ROLES',
+    'MANAGE_WEBHOOKS',
+    'MANAGE_EMOJIS',
+  ];
 
-  // const current_time = Date.now();
-  // const time_stamps = cooldowns.get(command.name);
-  // const cooldown_amount = command.cooldown * 1000;
+  if (command.permissions.length) {
+    let invalidPerms = [];
+    for (const perm of command.permissions) {
+      if (!validPermissions.includes(perm)) {
+        return console.log(`Invalid Permissions ${perm}`);
+      }
+      if (!message.member.permissions.has(perm)) {
+        invalidPerms.push(perm);
+      }
+    }
+    if (invalidPerms.length) {
+      return message.channel.send(`Missing Permissions: \`${invalidPerms}\``);
+    }
+  }
 
-  // //If time_stamps has a key with the author's id then check the expiration time to send a message to a user.
-  // if (time_stamps.has(message.author.id)) {
-  //   const expiration_time =
-  //     time_stamps.get(message.author.id) + cooldown_amount;
+  //If cooldowns map doesn't have a command.name key then create one.
+  if (!cooldowns.has(command.name)) {
+    cooldowns.set(command.name, new Discord.Collection());
+  }
 
-  //   if (current_time < expiration_time) {
-  //     const time_left = (expiration_time - current_time) / 1000;
+  const current_time = Date.now();
+  const time_stamps = cooldowns.get(command.name);
+  const cooldown_amount = command.cooldown * 1000;
 
-  //     return message.reply(
-  //       `Please wait ${time_left.toFixed(1)} more seconds before using ${
-  //         command.name
-  //       }`
-  //     );
-  //   }
-  // }
+  //If time_stamps has a key with the author's id then check the expiration time to send a message to a user.
+  if (time_stamps.has(message.author.id)) {
+    const expiration_time =
+      time_stamps.get(message.author.id) + cooldown_amount;
 
-  // //If the author's id is not in time_stamps then add them with the current time.
-  // time_stamps.set(message.author.id, current_time);
-  // //Delete the user's id once the cooldown is over.
-  // setTimeout(() => time_stamps.delete(message.author.id), cooldown_amount);
+    if (current_time < expiration_time) {
+      const time_left = (expiration_time - current_time) / 1000;
 
-  // try {
-  //   command.execute(message, args, cmd, client, Discord, profileData);
-  // } catch (err) {
-  //   message.reply('There was an error trying to execute this command!');
-  //   console.log(err);
-  // }
+      return message.reply(
+        `Please wait ${time_left.toFixed(1)} more seconds before using ${
+          command.name
+        }`
+      );
+    }
+  }
+
+  //If the author's id is not in time_stamps then add them with the current time.
+  time_stamps.set(message.author.id, current_time);
+  //Delete the user's id once the cooldown is over.
+  setTimeout(() => time_stamps.delete(message.author.id), cooldown_amount);
+
+  try {
+    command.execute(message, args, cmd, client, Discord, profileData);
+  } catch (err) {
+    message.reply('There was an error trying to execute this command!');
+    console.log(err);
+  }
 };
