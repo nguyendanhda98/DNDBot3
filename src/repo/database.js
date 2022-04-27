@@ -27,7 +27,7 @@ const findOne = (obj) => {
   return db.users.find(obj).value();
 };
 
-const updateUser = async (message, obj) => {
+const updateUser = async (user, obj) => {
   if (!obj.cash) {
     obj.cash = 0;
   }
@@ -35,12 +35,11 @@ const updateUser = async (message, obj) => {
     obj.bank = 0;
   }
 
-  findOne({ userID: message.author.id }).tag = message.author.tag;
-  findOne({ userID: message.author.id }).userName = message.author.username;
-  findOne({ userID: message.author.id }).userID = message.author.id;
-  findOne({ userID: message.author.id }).serverID = message.guild.id;
-  findOne({ userID: message.author.id }).cash += obj.cash;
-  findOne({ userID: message.author.id }).bank += obj.bank;
+  findOne({ userID: user.id }).tag = user.tag;
+  findOne({ userID: user.id }).userName = user.username;
+  findOne({ userID: user.id }).userID = user.id;
+  findOne({ userID: user.id }).cash += obj.cash;
+  findOne({ userID: user.id }).bank += obj.bank;
 
   await db.write();
 };

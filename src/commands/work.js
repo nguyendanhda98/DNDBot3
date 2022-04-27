@@ -17,7 +17,7 @@ export async function execute(
   profileData
 ) {
   const randomNumber = Math.floor(Math.random() * 6) + 1;
-  await updateUser(message, { cash: randomNumber });
+  await updateUser(message.author, { cash: randomNumber });
 
   const extra = {
     setDescription: `Bạn đã làm việc rất chăm chỉ và nhận được **${randomNumber} DND**`,

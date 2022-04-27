@@ -19,7 +19,7 @@ export async function execute(
   if (amount > profileData.bank)
     return message.channel.send(`Bạn không có đủ DND để rút`);
 
-  await updateUser(message, {
+  await updateUser(message.author, {
     cash: amount,
     bank: -amount,
   });
