@@ -1,10 +1,17 @@
-import { findOne, findOneAndUpdate } from '../models/profileSchema.js';
+import { findOne, updateUser } from '../repo/database.js';
 import messageEmbed from '../util/messageEmbed.js';
-export const name = 'sub-money';
-export const aliases = ['sm'];
+export const name = 'add-money';
+export const aliases = ['am'];
 export const permissions = [];
 export const description = 'give a player some coins';
-export async function execute(message, args, cmd, client, discord, profileData) {
+export async function execute(
+  message,
+  args,
+  cmd,
+  client,
+  discord,
+  profileData
+) {
   if (message.member.id != '452272161390985226')
     return message.channel.send(`Xin lỗi, chỉ Admin mới dùng được lệnh này`);
   var extra = {};
@@ -13,7 +20,7 @@ export async function execute(message, args, cmd, client, discord, profileData) 
       setDescription: 'Bạn cần điền người nhận',
     };
   } else {
-    const amount = args[1];
+    const amount = parseInt(args[1]);
     const target = message.mentions.users.first();
 
     if (!target) {
@@ -32,19 +39,14 @@ export async function execute(message, args, cmd, client, discord, profileData) 
           setDescription: 'Người nhận chưa sử dụng DND Coin',
         };
       } else {
-        await findOneAndUpdate(
-          {
-            userID: target.id,
-          },
-          {
-            $inc: {
-              cash: -amount,
-            },
-          }
-        );
+        await updateUser(target, {
+          cash: amount,
+        });
 
         extra = {
-          setDescription: `Đã trừ ${amount} DND của ${message.mentions.users.first().tag}`,
+          setDescription: `Đã cộng ${amount} DND cho ${
+            message.mentions.users.first().tag
+          }`,
         };
       }
     }
