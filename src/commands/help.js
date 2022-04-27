@@ -13,7 +13,7 @@ export function execute(message, args, cmd, client, discord, profileData) {
       { name: 'work', value: 'Làm việc kiếm tiền' },
       { name: 'with', value: 'Rút tiền từ ngần hàng' },
       { name: 'dep', value: 'Cất tiền vào ngân hàng' },
-      { name: 'cf', value: `Đá gà. \`cf <tiền cược>\`` },
+      { name: 'cf', value: `Tung đồng xu. \`cf <head/tail> <tiền cược>\`` },
       { name: 'give', value: `Chuyển tiền. \`give <người nhận> <số tiền>\`` },
       { name: 'de', value: `Chơi đề. \`de <tiền cược> <số cược>\`` },
       { name: 'money', value: 'Kiểm tra số tiền của mình' },

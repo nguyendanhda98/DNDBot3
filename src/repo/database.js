@@ -44,4 +44,9 @@ const updateUser = async (user, obj) => {
   await db.write();
 };
 
-export { getData, create, findOne, updateUser };
+const top = (number) => {
+  const top = db.users.sortBy(['cash']).reverse().take(number).value();
+  return top;
+};
+
+export { getData, create, findOne, updateUser, top };
