@@ -32,7 +32,6 @@ export default async (Discord, client, message) => {
     client.commands.find((a) => a.aliases && a.aliases.includes(cmd));
 
   if (!command) {
-    console.log(profileData);
     return message.channel.send(`Câu lệnh \`d.${cmd}\` không tồn tại!`);
   }
 

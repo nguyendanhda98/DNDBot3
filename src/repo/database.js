@@ -1,6 +1,7 @@
 import { join, dirname } from 'path';
 import { Low, JSONFile } from 'lowdb';
 import { fileURLToPath } from 'url';
+import userSchema from '../models/userSchema.js';
 import lodash from 'lodash';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -27,19 +28,20 @@ const findOne = (obj) => {
   return db.users.find(obj).value();
 };
 
-const updateUser = async (userID, obj) => {
-  Object.keys(obj).forEach((currentItem) => {
-    switch (currentItem) {
-      case 'cash':
-        db.users.find({ userID: userID }).value().cash += obj.cash;
-        break;
-      case 'bank':
-        db.users.find({ userID: userID }).value().bank += obj.bank;
-        break;
-      default:
-        break;
-    }
-  });
+const updateUser = async (message, obj) => {
+  if (!obj.cash) {
+    obj.cash = 0;
+  }
+  if (!obj.bank) {
+    obj.bank = 0;
+  }
+
+  findOne({ userID: message.author.id }).tag = message.author.tag;
+  findOne({ userID: message.author.id }).userName = message.author.username;
+  findOne({ userID: message.author.id }).userID = message.author.id;
+  findOne({ userID: message.author.id }).serverID = message.guild.id;
+  findOne({ userID: message.author.id }).cash += obj.cash;
+  findOne({ userID: message.author.id }).bank += obj.bank;
 
   await db.write();
 };
