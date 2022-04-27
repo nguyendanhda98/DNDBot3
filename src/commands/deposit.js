@@ -12,15 +12,14 @@ export async function execute(
   discord,
   profileData
 ) {
-  const amountString = args[0];
-  const amount = parseInt(amountString);
+  const amount = parseInt(args[0]);
 
   if (amount % 1 != 0 || amount <= 0)
     return message.channel.send('Số DND không hợp lệ!');
 
   if (amount > profileData.cash)
     return message.channel.send(`Bạn không có đủ DND`);
-  await updateUser(message.author.id, {
+  await updateUser(message, {
     cash: -amount,
     bank: amount,
   });
