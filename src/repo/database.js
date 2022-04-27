@@ -1,7 +1,6 @@
 import { join, dirname } from 'path';
 import { Low, JSONFile } from 'lowdb';
 import { fileURLToPath } from 'url';
-import userSchema from '../models/userSchema.js';
 import lodash from 'lodash';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

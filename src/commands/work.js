@@ -1,5 +1,5 @@
 import userSchema from '../models/userSchema.js';
-import { updateUser, newUser } from '../repo/database.js';
+import { updateUser } from '../repo/database.js';
 import messageEmbed from '../util/messageEmbed.js';
 
 export const name = 'work';
