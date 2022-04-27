@@ -1,5 +1,5 @@
-const { cardEmojis } = require('../../util/constant')
-module.exports = class Card {
+import { cardEmojis } from '../../util/constant.js';
+export default class Card {
     constructor(cardType, cardNumber) {
         this.cardNumber = cardNumber
         this.cardType = cardType

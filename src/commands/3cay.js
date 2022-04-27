@@ -1,14 +1,15 @@
 import messageEmbed from '../util/messageEmbed.js';
 import GameTable from '../Base/bc/GameTable.js';
-import { getInstance } from '../Base/bc/GameTableManagement.js';
-import { updateUser } from '../services/profile.js';
-const gameTableManagement = getInstance();
+import GameTableManagement from '../Base/bc/GameTableManagement.js';
+import { updateUser } from '../repo/database.js';
+
+const gameTableManagement = GameTableManagement.getInstance();
 const dndEmoji = process.env.DND_EMOJI;
-export const name = 'baucua';
-export const aliases = ['bc'];
+export const name = '3cay';
+export const aliases = ['3c'];
 export const cooldown = 0;
 export const permissions = [];
-export const description = 'choi Bau Cua';
+export const description = 'choi Ba Cay';
 export async function execute(
   message,
   args,
@@ -316,7 +317,7 @@ export async function execute(
       }, 1000);
 
       result.playersInfo.forEach(
-        async (player) => await updateUser(player.id, { cash: player.amount })
+        async (player) => await updateUser(player, { cash: player.amount })
       );
       return;
     case 'deny':

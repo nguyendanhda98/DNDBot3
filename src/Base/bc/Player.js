@@ -1,6 +1,6 @@
-const Card = require('./Card')
+import Card from './Card.js';
 
-module.exports = class Player {
+export default class Player {
     id = null
     username = null
     cards = []

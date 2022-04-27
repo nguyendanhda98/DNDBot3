@@ -1,20 +1,19 @@
 {
   "users": [
     {
-      "tag": "Nguyễn Danh Đa#5443",
       "userName": "Nguyễn Danh Đa",
       "userID": "452272161390985226",
       "serverID": "820342303745900635",
-      "cash": 68,
+      "cash": 66,
       "bank": 0
     },
     {
-      "tag": "nguyendanhda9801#3830",
       "userName": "nguyendanhda9801",
       "userID": "949343025149132820",
       "serverID": "820342303745900635",
-      "cash": 100,
-      "bank": 0
+      "cash": 101,
+      "bank": 0,
+      "tag": "nguyendanhda9801#3830"
     },
     {
       "tag": "An An#4751",

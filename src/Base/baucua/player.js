@@ -1,8 +1,8 @@
 export default class player {
-  constructor(id) {
+  constructor(id, host, playing) {
     this.id = id;
-    this.host = false;
-    this.playing = false;
+    this.host = host;
+    this.playing = playing;
     this.bets = [];
     this.winAmount = 0;
   }

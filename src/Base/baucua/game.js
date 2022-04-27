@@ -1,13 +1,21 @@
-export default class Game {
-  constructor(idHost, maxPlayer = false) {
-    this.host = idHost;
+import _ from 'lodash';
+const gameTotal = [];
+
+class game {
+  constructor(hostID, maxPlayer = false) {
+    this.hostID = hostID;
     this.maxPlayer = maxPlayer;
     this.members = [];
   }
 
-  join(mem) {
-    this.members.push(mem);
+  pushGame(newGame) {
+    gameTotal.push(newGame);
   }
+
+  static joinGame(member) {
+    _.find(gameTotal, { hostID: member.playing }).members.push(member);
+  }
+  
   start() {
     const x1 = Math.ceil(Math.random() * 6);
     const x2 = Math.ceil(Math.random() * 6);
@@ -37,4 +45,6 @@ export default class Game {
       console.log(mem);
     });
   }
-};
+}
+
+export { game };
