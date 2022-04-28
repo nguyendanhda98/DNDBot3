@@ -3,7 +3,14 @@ export default class player {
     this.id = id;
     this.host = host;
     this.playing = playing;
-    this.bets = [];
+    this.bets = [
+      { name: 'bau', amount: 0 },
+      { name: 'cua', amount: 0 },
+      { name: 'tom', amount: 0 },
+      { name: 'ca', amount: 0 },
+      { name: 'nai', amount: 0 },
+      { name: 'ga', amount: 0 },
+    ];
     this.winAmount = 0;
   }
 
