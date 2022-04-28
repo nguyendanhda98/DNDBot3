@@ -136,7 +136,7 @@ export async function execute(
       getPlayer(author.id);
       break;
     case 'leave':
-      
+      leave()
       break;  
     case 'check':
       check(author.id);
