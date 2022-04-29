@@ -49,4 +49,16 @@ const top = (number) => {
   return top;
 };
 
-export { getData, create, findOne, updateUser, top };
+const updateMoney = async (userID, obj) => {
+  if (!obj.cash) {
+    obj.cash = 0;
+  }
+  if (!obj.bank) {
+    obj.bank = 0;
+  }
+  findOne({ userID: userID }).cash += obj.cash;
+  findOne({ userID: userID }).bank += obj.bank;
+  await db.write();
+}
+
+export { getData, create, findOne, updateUser, top, updateMoney };

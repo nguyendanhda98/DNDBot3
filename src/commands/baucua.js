@@ -14,11 +14,14 @@ import {
 } from '../Base/baucua/game.js';
 import player from '../Base/baucua/player.js';
 import messageEmbed from '../util/messageEmbed.js';
+import _ from 'lodash';
+import { findOne } from '../repo/database.js';
 export const name = 'baucua';
 export const aliases = ['bc'];
 export const cooldown = 0;
 export const permissions = [];
 export const description = 'tro choi bau cua';
+
 export async function execute(
   message,
   args,
@@ -99,7 +102,7 @@ export async function execute(
         };
         break;
       }
-      if (!findGame(author.id)) {
+      if (findGame(author.id)) {
         extra = {
           setDescription: `Bạn đang là chủ bàn. Không thể đặt cược!`,
         };
@@ -139,7 +142,34 @@ export async function execute(
         };
         break;
       }
-      start(author.id); //array [x1,x2,x3]
+
+      let result = start(author.id); //array [x1,x2,x3]
+
+      extra = {
+        setDescription: `Kết quả: ${result}`,
+        addFields: [],
+      };
+
+      let currentPlayer = getPlayer(author.id);
+
+      currentPlayer.forEach((player) => {
+        const user = findOne({ userID: player.id });
+        let name = `${user.userName} (${player.winAmount})`;
+        let value = []; //name amount, name amount, name amount
+
+        player.bets.forEach((bet) => {
+          if (bet.amount != 0) {
+            value.push(`${bet.name} ${bet.amount}`);
+          }
+        });
+
+        const objPlayer = {
+          name: name,
+          value: _.join(value, ', '),
+          inline: true,
+        };
+        extra.addFields.push(objPlayer);
+      });
       resetBet(author.id);
       break;
     case 'leave':
@@ -149,7 +179,7 @@ export async function execute(
         };
       } else {
         extra = {
-          setDescription: 'Rời thất bại. Bạn đang không tham gia bàn chơi nào',
+          setDescription: 'Rời phòng thất bại. Bạn chưa tham gia bàn chơi nào',
         };
       }
       break;

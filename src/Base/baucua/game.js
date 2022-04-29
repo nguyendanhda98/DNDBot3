@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { updateUser } from '../../repo/database.js';
+import { updateMoney } from '../../repo/database.js';
 let gameTotal = [];
 let playerTotal = [];
 
@@ -42,34 +42,69 @@ const check = (hostID) => {
 
   // console.log(findGame(hostID).members.bets);
 };
-const start = async (hostID) => {
-  const x1 = Math.ceil(Math.random() * 6);
-  const x2 = Math.ceil(Math.random() * 6);
-  const x3 = Math.ceil(Math.random() * 6);
+const start = (hostID) => {
+  // let x1 = Math.ceil(Math.random() * 6);
+  // let x2 = Math.ceil(Math.random() * 6);
+  // let x3 = Math.ceil(Math.random() * 6);
 
-  getPlayer(hostID).forEach((mem) => {
+  let x1 = 2;
+  let x2 = 2;
+  let x3 = 2;
+
+  let arrNumber = [x1, x2, x3];
+
+  arrNumber.forEach((num, index) => {
+    switch (num) {
+      case 1:
+        arrNumber[index] = 'bau';
+        break;
+      case 2:
+        arrNumber[index] = 'cua';
+        break;
+      case 3:
+        arrNumber[index] = 'tom';
+        break;
+      case 4:
+        arrNumber[index] = 'ca';
+        break;
+      case 5:
+        arrNumber[index] = 'nai';
+        break;
+      case 6:
+        arrNumber[index] = 'ga';
+        break;
+    }
+  });
+
+  getPlayer(hostID).forEach(async (mem) => {
+    console.log('80', mem);
+
     mem.bets.forEach((bet) => {
+      console.log('82', bet);
       let flag = false;
-      if (bet.name == x1) {
+      if (bet.name == arrNumber[0]) {
         mem.winAmount += bet.amount;
         flag = true;
       }
-      if (bet.name == x2) {
+      if (bet.name == arrNumber[1]) {
         mem.winAmount += bet.amount;
         flag = true;
       }
-      if (bet.name == x3) {
+      if (bet.name == arrNumber[2]) {
         mem.winAmount += bet.amount;
         flag = true;
       }
       if (!flag) {
         mem.winAmount -= bet.amount;
       }
+      console.log('99', mem.winAmount);
     });
-    await updateUser(message.author, { cash: mem.winAmount });
+
+    console.log('101', mem.winAmount);
+    await updateMoney(mem.id, { cash: mem.winAmount });
   });
 
-  return [x1, x2, x3];
+  return arrNumber;
 };
 
 const getPlayer = (hostID) => {
@@ -97,6 +132,7 @@ const resetBet = (hostID) => {
       { name: 'nai', amount: 0 },
       { name: 'ga', amount: 0 },
     ];
+    player.winAmount = 0;
   });
 };
 
