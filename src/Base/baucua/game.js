@@ -34,6 +34,7 @@ const findPlayer = (userID) => {
 
 const bet = (userID, betObj) => {
   _.find(findPlayer(userID).bets, { name: betObj.name }).amount = betObj.amount;
+  findPlayer(userID).bet = true;
 };
 const check = (hostID) => {
   getPlayer(hostID).forEach((player) => {
@@ -77,10 +78,7 @@ const start = (hostID) => {
   });
 
   getPlayer(hostID).forEach(async (mem) => {
-    console.log('80', mem);
-
     mem.bets.forEach((bet) => {
-      console.log('82', bet);
       let flag = false;
       if (bet.name == arrNumber[0]) {
         mem.winAmount += bet.amount;
@@ -97,10 +95,8 @@ const start = (hostID) => {
       if (!flag) {
         mem.winAmount -= bet.amount;
       }
-      console.log('99', mem.winAmount);
     });
 
-    console.log('101', mem.winAmount);
     await updateMoney(mem.id, { cash: mem.winAmount });
   });
 
@@ -133,7 +129,26 @@ const resetBet = (hostID) => {
       { name: 'ga', amount: 0 },
     ];
     player.winAmount = 0;
+    player.bet = false;
   });
+};
+
+const checkBet = (hostID) => {
+  let waiting = [];
+  getPlayer(hostID).forEach((player) => {
+    if (!player.bet) {
+      waiting.push(player);
+    }
+  });
+  return waiting;
+};
+
+const countPlayer = (userID) => {
+  let check = findPlayer(userID);
+  if (check) {
+    let hostID = check.playing;
+    return getPlayer(hostID);
+  } else return false;
 };
 
 export {
@@ -149,4 +164,6 @@ export {
   findPlayer,
   leave,
   resetBet,
+  checkBet,
+  countPlayer,
 };

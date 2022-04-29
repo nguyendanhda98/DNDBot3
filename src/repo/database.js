@@ -61,4 +61,6 @@ const updateMoney = async (userID, obj) => {
   await db.write();
 }
 
+
+
 export { getData, create, findOne, updateUser, top, updateMoney };

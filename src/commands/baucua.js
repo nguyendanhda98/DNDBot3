@@ -11,6 +11,8 @@ import {
   findPlayer,
   leave,
   resetBet,
+  checkBet,
+  countPlayer,
 } from '../Base/baucua/game.js';
 import player from '../Base/baucua/player.js';
 import messageEmbed from '../util/messageEmbed.js';
@@ -96,15 +98,15 @@ export async function execute(
     //   ready(author.id);
     //   break;
     case 'bet':
-      if (!findPlayer(author.id)) {
-        extra = {
-          setDescription: `Bạn đang tham không gia bàn nào. Không thể đặt cược!`,
-        };
-        break;
-      }
       if (findGame(author.id)) {
         extra = {
           setDescription: `Bạn đang là chủ bàn. Không thể đặt cược!`,
+        };
+        break;
+      }
+      if (!findPlayer(author.id)) {
+        extra = {
+          setDescription: `Bạn đang tham không gia bàn nào. Không thể đặt cược!`,
         };
         break;
       }
@@ -143,6 +145,28 @@ export async function execute(
         break;
       }
 
+      if (getPlayer(author.id).length == 0) {
+        extra = {
+          setDescription: 'Chưa có ai tham gia bàn. Không thể bắt đầu!',
+        };
+        break;
+      }
+
+      let checkBetArr = checkBet(author.id);
+      let userNotBet = [];
+      if (checkBetArr.length > 0) {
+        checkBetArr.forEach((user) => {
+          userNotBet.push(findOne({ userID: user.id }).userName);
+        });
+
+        extra = {
+          setDescription: `${userNotBet.join(
+            ', '
+          )} chưa sẵn sàng. Không thể bắt đầu!`,
+        };
+        break;
+      }
+
       let result = start(author.id); //array [x1,x2,x3]
 
       extra = {
@@ -170,6 +194,7 @@ export async function execute(
         };
         extra.addFields.push(objPlayer);
       });
+
       resetBet(author.id);
       break;
     case 'leave':
@@ -185,6 +210,50 @@ export async function execute(
       break;
     case 'check':
       check(author.id);
+      break;
+    case 'info':
+      extra = {
+        setDescription: `Bàn trống`,
+        addFields: [{ name: '\u200B', value: '\u200B', inline: false }],
+      };
+
+      let currentPlayerInfo = countPlayer(author.id);
+      if (!currentPlayerInfo) {
+        extra = {
+          setDescription: `Bạn hiện tại đang không tham gia bàn nào. Không thể kiểm tra thông tin phòng`,
+        };
+        break;
+      }
+      let flag = false;
+      currentPlayerInfo.forEach((player) => {
+        flag = true;
+        extra.setDescription = 'Đặt cược thôi';
+        const user = findOne({ userID: player.id });
+        let name = `${user.userName} (${player.winAmount})`;
+        let value = [];
+
+        player.bets.forEach((bet) => {
+          if (bet.amount != 0) {
+            value.push(`${bet.name} ${bet.amount}`);
+          }
+        });
+
+        if (value.length == 0) {
+          value.push('Đang đặt cược...');
+        }
+
+        const objPlayer = {
+          name: name,
+          value: _.join(value, ', '),
+          inline: true,
+        };
+        extra.addFields.push(objPlayer);
+      });
+
+      if (flag) {
+        extra.addFields.shift();
+      }
+
       break;
     default:
       break;
