@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { updateUser } from '../../repo/database.js';
 let gameTotal = [];
 let playerTotal = [];
 
@@ -32,27 +33,21 @@ const findPlayer = (userID) => {
 };
 
 const bet = (userID, betObj) => {
-  // _.set(
-  //   _.find(findPlayer(userID).bets, { name: betObj.name }),
-  //   [betObj.amount],
-  //   betObj.amount
-  // );
   _.find(findPlayer(userID).bets, { name: betObj.name }).amount = betObj.amount;
-
-  console.log(findPlayer(userID).bets);
-
-  // console.log(findPlayer(userID).bets);
-  // findPlayer(userID).bets[betObj.name].amount = betObj.amount;
 };
 const check = (hostID) => {
-  console.log(findGame(hostID).members.bets);
+  getPlayer(hostID).forEach((player) => {
+    console.log(player.bets);
+  });
+
+  // console.log(findGame(hostID).members.bets);
 };
-const start = (hostID) => {
+const start = async (hostID) => {
   const x1 = Math.ceil(Math.random() * 6);
   const x2 = Math.ceil(Math.random() * 6);
   const x3 = Math.ceil(Math.random() * 6);
 
-  findGame(hostID).members.forEach((mem) => {
+  getPlayer(hostID).forEach((mem) => {
     mem.bets.forEach((bet) => {
       let flag = false;
       if (bet.name == x1) {
@@ -71,13 +66,38 @@ const start = (hostID) => {
         mem.winAmount -= bet.amount;
       }
     });
+    await updateUser(message.author, { cash: mem.winAmount });
   });
 
   return [x1, x2, x3];
 };
 
 const getPlayer = (hostID) => {
-  console.log(_.find(gameTotal, { hostID: hostID }).members);
+  return findGame(hostID).members;
+};
+
+const leave = (userID) => {
+  if (findGame(userID)) {
+    _.remove(gameTotal, { hostID: userID });
+    _.remove(playerTotal, { playing: userID });
+    return true;
+  } else if (findPlayer(userID)) {
+    _.remove(playerTotal, { id: userID });
+    return true;
+  } else return false;
+};
+
+const resetBet = (hostID) => {
+  getPlayer(hostID).forEach((player) => {
+    player.bets = [
+      { name: 'bau', amount: 0 },
+      { name: 'cua', amount: 0 },
+      { name: 'tom', amount: 0 },
+      { name: 'ca', amount: 0 },
+      { name: 'nai', amount: 0 },
+      { name: 'ga', amount: 0 },
+    ];
+  });
 };
 
 export {
@@ -91,4 +111,6 @@ export {
   getPlayer,
   findGame,
   findPlayer,
+  leave,
+  resetBet,
 };

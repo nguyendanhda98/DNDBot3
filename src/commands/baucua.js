@@ -9,6 +9,8 @@ import {
   getPlayer,
   findGame,
   findPlayer,
+  leave,
+  resetBet,
 } from '../Base/baucua/game.js';
 import player from '../Base/baucua/player.js';
 import messageEmbed from '../util/messageEmbed.js';
@@ -81,20 +83,25 @@ export async function execute(
       joinGame(member);
 
       break;
-    case 'ready':
-      if (!findGame(author.id)) {
+    // case 'ready':
+    //   if (!findGame(author.id)) {
+    //     extra = {
+    //       setDescription: 'Bạn không phải chủ phòng. Không thể sẵn sàng!',
+    //     };
+    //     break;
+    //   }
+    //   ready(author.id);
+    //   break;
+    case 'bet':
+      if (!findPlayer(author.id)) {
         extra = {
-          setDescription: 'Bạn không phải chủ phòng. Không thể sẵn sàng!',
+          setDescription: `Bạn đang tham không gia bàn nào. Không thể đặt cược!`,
         };
         break;
       }
-      ready(author.id);
-      break;
-    case 'bet':
-
-    if (!findPlayer(author.id)) {
+      if (!findGame(author.id)) {
         extra = {
-          setDescription: `Bạn đang tham không gia bàn nào. Không thể đặt cược!`,
+          setDescription: `Bạn đang là chủ bàn. Không thể đặt cược!`,
         };
         break;
       }
@@ -132,12 +139,20 @@ export async function execute(
         };
         break;
       }
-      start(author.id);
-      getPlayer(author.id);
+      start(author.id); //array [x1,x2,x3]
+      resetBet(author.id);
       break;
     case 'leave':
-      leave()
-      break;  
+      if (leave(author.id)) {
+        extra = {
+          setDescription: 'Rời phòng thành công',
+        };
+      } else {
+        extra = {
+          setDescription: 'Rời thất bại. Bạn đang không tham gia bàn chơi nào',
+        };
+      }
+      break;
     case 'check':
       check(author.id);
       break;
