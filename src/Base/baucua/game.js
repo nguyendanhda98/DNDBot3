@@ -44,7 +44,7 @@ const check = (hostID) => {
 
   // console.log(findGame(hostID).members.bets);
 };
-const start = (hostID) => {
+const start = async (hostID) => {
   let x1 = Math.ceil(Math.random() * 6);
   let x2 = Math.ceil(Math.random() * 6);
   let x3 = Math.ceil(Math.random() * 6);
