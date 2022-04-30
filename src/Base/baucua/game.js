@@ -77,8 +77,9 @@ const start = (hostID) => {
         break;
     }
   });
-
+let hostWinAmount = 0;
   getPlayer(hostID).forEach(async (mem) => {
+
     mem.bets.forEach((bet) => {
       let flag = false;
       if (bet.name == arrNumber[0]) {
@@ -97,9 +98,11 @@ const start = (hostID) => {
         mem.winAmount -= bet.amount;
       }
     });
-
+        hostWinAmount +=mem.winAmount;
     await updateMoney(mem.id, { cash: mem.winAmount });
+    
   });
+await updateMoney(hostID, { cash: hostWinAmount });
 
 arrNumber.forEach((num, index) => {
   switch (num) {
