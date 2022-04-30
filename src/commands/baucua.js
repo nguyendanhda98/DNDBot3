@@ -223,124 +223,127 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
         break;
       }
 
-      const name = args[1];
-      const amount = parseInt(args[2]);
+      const betValues = _.chunk(_.slice(args, 1), 2); //Array
       const arr = ['bau', 'cua', 'tom', 'ca', 'nai', 'ga'];
 
-      if (!arr.includes(name)) {
-        extra = {
-          setDescription:
-            'Con vật không hợp lệ. Hãy thử với các con vật sau: `bau`,`cua`,`tom`,`ca`,`nai`,`ga`',
-        };
-        break;
-      }
+      for (let e of betValues) {
+        const name = e[0];
+        const amount = parseInt(e[1]);
 
-      if (amount % 1 != 0 || amount <= 0) {
-        extra = {
-          setDescription: 'Số tiền không hợp lệ',
-        };
-      }
-      if (amount > profileData.cash) {
-        extra = {
-          setDescription: 'Bạn không có đủ DND',
-        };
-      }
+        if (!arr.includes(name)) {
+          extra = {
+            setDescription:
+              'Con vật không hợp lệ. Hãy thử với các con vật sau: `bau`,`cua`,`tom`,`ca`,`nai`,`ga`',
+          };
+          break;
+        }
+        if (amount % 1 != 0 || amount <= 0) {
+          extra = {
+            setDescription: 'Số tiền không hợp lệ',
+          };
+          break;
+        }
+        if (amount > profileData.cash) {
+          extra = {
+            setDescription: 'Bạn không có đủ DND',
+          };
+          break;
+        }
 
-      const betObj = { name: name, amount: amount };
-      bet(author.id, betObj);
+        const betObj = { name: name, amount: amount };
+        bet(author.id, betObj);
 
-      if (findPlayer(author.id)) {
-        extra = {
-          setTitle: 'Bầu Cua',
-          setDescription: `Tạo phòng: \`d.bc new\`
+        if (findPlayer(author.id)) {
+          extra = {
+            setTitle: 'Bầu Cua',
+            setDescription: `Tạo phòng: \`d.bc new\`
 Vào phòng: \`d.bc join <nhà cái>\`
 Đặt cược: \`d.bc bet <con vật> <tiền cược>\`
 Bắt đầu: \`d.bc start\`
 
 Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
 \u200B`,
-          addFields: [
-            {
-              name: 'Nhà cái',
-              value: `<@${findPlayer(author.id).playing}>`,
-              inline: false,
-            },
-            {
-              name: 'Người chơi',
-              value: 'Kết quả: ... ... ...',
-              inline: false,
-            },
-          ],
-          // setDescription: `${author.username} vừa tạo một bàn chơi bầu cua.`,
-        };
-      }
-      // extra = {
-      //   setDescription: `Bàn trống`,
-      //   addFields: [{ name: '\u200B', value: 'Kết quả: ... ... ...', inline: false }],
-      // };
+            addFields: [
+              {
+                name: 'Nhà cái',
+                value: `<@${findPlayer(author.id).playing}>`,
+                inline: false,
+              },
+              {
+                name: 'Người chơi',
+                value: 'Kết quả: ... ... ...',
+                inline: false,
+              },
+            ],
+            // setDescription: `${author.username} vừa tạo một bàn chơi bầu cua.`,
+          };
+        }
+        // extra = {
+        //   setDescription: `Bàn trống`,
+        //   addFields: [{ name: '\u200B', value: 'Kết quả: ... ... ...', inline: false }],
+        // };
 
-      let currentPlayerInfo2 = countPlayer(author.id);
-      if (!currentPlayerInfo2) {
-        extra = {
-          setDescription: `Bạn hiện tại đang không tham gia bàn nào. Không thể kiểm tra thông tin phòng`,
-        };
-        break;
-      }
-      // let flag = false;
-      currentPlayerInfo2.forEach((player) => {
-        // flag = true;
-        // extra.setDescription = 'Đặt cược thôi';
-        const user = findOne({ userID: player.id });
-        let name = `${user.userName} (${player.winAmount})`;
-        let value = [];
+        let currentPlayerInfo2 = countPlayer(author.id);
+        if (!currentPlayerInfo2) {
+          extra = {
+            setDescription: `Bạn hiện tại đang không tham gia bàn nào. Không thể kiểm tra thông tin phòng`,
+          };
+          break;
+        }
+        // let flag = false;
+        currentPlayerInfo2.forEach((player) => {
+          // flag = true;
+          // extra.setDescription = 'Đặt cược thôi';
+          const user = findOne({ userID: player.id });
+          let name = `${user.userName} (${player.winAmount})`;
+          let value = [];
 
-        player.bets.forEach((bet) => {
-          if (bet.amount != 0) {
-            let name = bet.name;
-            switch (name) {
-              case 'bau':
-                name = bcEmojis.bau;
-                break;
-              case 'cua':
-                name = bcEmojis.cua;
-                break;
-              case 'tom':
-                name = bcEmojis.tom;
-                break;
-              case 'ca':
-                name = bcEmojis.ca;
-                break;
-              case 'nai':
-                name = bcEmojis.nai;
-                break;
-              case 'ga':
-                name = bcEmojis.ga;
-                break;
+          player.bets.forEach((bet) => {
+            if (bet.amount != 0) {
+              let name = bet.name;
+              switch (name) {
+                case 'bau':
+                  name = bcEmojis.bau;
+                  break;
+                case 'cua':
+                  name = bcEmojis.cua;
+                  break;
+                case 'tom':
+                  name = bcEmojis.tom;
+                  break;
+                case 'ca':
+                  name = bcEmojis.ca;
+                  break;
+                case 'nai':
+                  name = bcEmojis.nai;
+                  break;
+                case 'ga':
+                  name = bcEmojis.ga;
+                  break;
+              }
+
+              value.push(`${name} ${bet.amount}`);
             }
+          });
 
-            value.push(`${name} ${bet.amount}`);
+          if (value.length == 0) {
+            value.push('Đang đặt cược...');
           }
+
+          const objPlayer = {
+            name: name,
+            value: _.join(value, ', '),
+            inline: true,
+          };
+          extra.addFields.push(objPlayer);
         });
 
-        if (value.length == 0) {
-          value.push('Đang đặt cược...');
-        }
-
-        const objPlayer = {
-          name: name,
-          value: _.join(value, ', '),
-          inline: true,
-        };
-        extra.addFields.push(objPlayer);
-      });
-
-      // if (flag) {
-      //   extra.addFields.shift();
-      // }
-
+        // if (flag) {
+        //   extra.addFields.shift();
+        // }
+      }
       break;
 
-      break;
     case 'start':
       if (!findGame(author.id)) {
         extra = {
@@ -577,7 +580,7 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
 
     default:
       extra = {
-        setDescription:'Lệnh không hợp lệ'
+        setDescription: 'Lệnh không hợp lệ',
       };
       break;
   }
