@@ -371,7 +371,7 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
         break;
       }
 
-      let result = start(author.id); //array [x1,x2,x3]
+      let result = await start(author.id); //array [x1,x2,x3]
 
       extra = {
         setTitle: 'Bầu Cua',
