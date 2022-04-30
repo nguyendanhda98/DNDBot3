@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { updateMoney } from '../../repo/database.js';
-import {bcEmojis} from '../../util/constant.js'
+import { bcEmojis } from '../../util/constant.js';
 let gameTotal = [];
 let playerTotal = [];
 
@@ -77,9 +77,8 @@ const start = async (hostID) => {
         break;
     }
   });
-let hostWinAmount = 0;
+  let hostWinAmount = 0;
   getPlayer(hostID).forEach(async (mem) => {
-
     mem.bets.forEach((bet) => {
       let flag = false;
       if (bet.name == arrNumber[0]) {
@@ -98,34 +97,33 @@ let hostWinAmount = 0;
         mem.winAmount -= bet.amount;
       }
     });
-        hostWinAmount +=mem.winAmount;
+    hostWinAmount -= mem.winAmount;
     await updateMoney(mem.id, { cash: mem.winAmount });
-    
   });
-await updateMoney(hostID, { cash: hostWinAmount });
+  await updateMoney(hostID, { cash: hostWinAmount });
 
-arrNumber.forEach((num, index) => {
-  switch (num) {
-    case 'bau':
-      arrNumber[index] = bcEmojis.bau;
-      break;
-    case 'cua':
-      arrNumber[index] = bcEmojis.cua;
-      break;
-    case 'tom':
-      arrNumber[index] = bcEmojis.tom;
-      break;
-    case 'ca':
-      arrNumber[index] = bcEmojis.ca
-      break;
-    case 'nai':
-      arrNumber[index] = bcEmojis.nai;
-      break;
-    case 'ga':
-      arrNumber[index] = bcEmojis.ga;
-      break;
-  }
-});
+  arrNumber.forEach((num, index) => {
+    switch (num) {
+      case 'bau':
+        arrNumber[index] = bcEmojis.bau;
+        break;
+      case 'cua':
+        arrNumber[index] = bcEmojis.cua;
+        break;
+      case 'tom':
+        arrNumber[index] = bcEmojis.tom;
+        break;
+      case 'ca':
+        arrNumber[index] = bcEmojis.ca;
+        break;
+      case 'nai':
+        arrNumber[index] = bcEmojis.nai;
+        break;
+      case 'ga':
+        arrNumber[index] = bcEmojis.ga;
+        break;
+    }
+  });
 
   return arrNumber;
 };
@@ -182,7 +180,6 @@ const countPlayer = (userID) => {
     return getPlayer(userID);
   } else return false;
 };
-
 
 export {
   game,

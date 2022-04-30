@@ -59,8 +59,6 @@ const updateMoney = async (userID, obj) => {
   findOne({ userID: userID }).cash += obj.cash;
   findOne({ userID: userID }).bank += obj.bank;
   await db.write();
-}
-
-
+};
 
 export { getData, create, findOne, updateUser, top, updateMoney };
