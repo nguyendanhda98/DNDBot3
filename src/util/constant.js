@@ -14,6 +14,16 @@ export const distributeCardsState = {
   INPROCESS: "inprocess",
   YES: "yes",
 };
+
+export const bcEmojis = {
+  bau: '<:bau:969939787526078485>',
+  cua: '<:cua:969939787819679864>',
+  tom: '<:tom:969939786498465882>',
+  ca: '<:ca:969939786796249089>',
+  nai: '<:nai:969939787144380428>',
+  ga: '<:ga:969939787622535218>',
+};
+
 export const cardEmojis = {
   H2: "<:2H:964602747582312538>",
   D2: "<:2D:964602747448074260>",

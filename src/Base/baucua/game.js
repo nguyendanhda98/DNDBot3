@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { updateMoney } from '../../repo/database.js';
+import {bcEmojis} from '../../util/constant.js'
 let gameTotal = [];
 let playerTotal = [];
 
@@ -44,13 +45,13 @@ const check = (hostID) => {
   // console.log(findGame(hostID).members.bets);
 };
 const start = (hostID) => {
-  // let x1 = Math.ceil(Math.random() * 6);
-  // let x2 = Math.ceil(Math.random() * 6);
-  // let x3 = Math.ceil(Math.random() * 6);
+  let x1 = Math.ceil(Math.random() * 6);
+  let x2 = Math.ceil(Math.random() * 6);
+  let x3 = Math.ceil(Math.random() * 6);
 
-  let x1 = 2;
-  let x2 = 2;
-  let x3 = 2;
+  // let x1 = 2;
+  // let x2 = 2;
+  // let x3 = 2;
 
   let arrNumber = [x1, x2, x3];
 
@@ -100,6 +101,29 @@ const start = (hostID) => {
     await updateMoney(mem.id, { cash: mem.winAmount });
   });
 
+arrNumber.forEach((num, index) => {
+  switch (num) {
+    case 'bau':
+      arrNumber[index] = bcEmojis.bau;
+      break;
+    case 'cua':
+      arrNumber[index] = bcEmojis.cua;
+      break;
+    case 'tom':
+      arrNumber[index] = bcEmojis.tom;
+      break;
+    case 'ca':
+      arrNumber[index] = bcEmojis.ca
+      break;
+    case 'nai':
+      arrNumber[index] = bcEmojis.nai;
+      break;
+    case 'ga':
+      arrNumber[index] = bcEmojis.ga;
+      break;
+  }
+});
+
   return arrNumber;
 };
 
@@ -112,10 +136,14 @@ const leave = (userID) => {
     _.remove(gameTotal, { hostID: userID });
     _.remove(playerTotal, { playing: userID });
     return true;
-  } else if (findPlayer(userID)) {
+  }
+  if (findPlayer(userID)) {
+    let hostID = findPlayer(userID).playing;
     _.remove(playerTotal, { id: userID });
+    _.remove(getPlayer(hostID), { id: userID });
     return true;
-  } else return false;
+  }
+  return false;
 };
 
 const resetBet = (hostID) => {
@@ -144,12 +172,14 @@ const checkBet = (hostID) => {
 };
 
 const countPlayer = (userID) => {
-  let check = findPlayer(userID);
-  if (check) {
-    let hostID = check.playing;
+  if (findPlayer(userID)) {
+    let hostID = findPlayer(userID).playing;
     return getPlayer(hostID);
+  } else if (findGame(userID)) {
+    return getPlayer(userID);
   } else return false;
 };
+
 
 export {
   game,

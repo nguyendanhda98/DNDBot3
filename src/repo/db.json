@@ -30,6 +30,30 @@
       "serverID": "820342303745900635",
       "cash": 100013,
       "bank": 0
+    },
+    {
+      "tag": "an fake#4371",
+      "userName": "an fake",
+      "userID": "949364866379046922",
+      "serverID": "820342303745900635",
+      "cash": 5,
+      "bank": 0
+    },
+    {
+      "tag": "Quynh#1308",
+      "userName": "Quynh",
+      "userID": "926121038637596672",
+      "serverID": "820342303745900635",
+      "cash": 3,
+      "bank": 0
+    },
+    {
+      "tag": "nguyendanhda9803#0534",
+      "userName": "nguyendanhda9803",
+      "userID": "950105602175139940",
+      "serverID": "820342303745900635",
+      "cash": 1000,
+      "bank": 0
     }
   ]
 }

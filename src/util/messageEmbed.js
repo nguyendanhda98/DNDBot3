@@ -13,10 +13,11 @@ export default (message, discord, extra) => {
 
   const messageEmbed = new discord.MessageEmbed()
     .setAuthor({
-      name: message.author.tag,
+      name: message.author.username,
       iconURL: message.author.displayAvatarURL(),
     })
-    .setTimestamp();
+    .setTimestamp()
+    .setColor('#5865f2');
 
   if (setDescription) {
     messageEmbed.setDescription(setDescription);

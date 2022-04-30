@@ -1,5 +1,5 @@
 export default class userSchema {
-  constructor(tag, userName, userID, serverID, cash = 0, bank = 0) {
+  constructor(tag, userName, userID, serverID, cash = 1000, bank = 0) {
     this.tag = tag;
     this.userName = userName;
     this.userID = userID;
@@ -14,5 +14,4 @@ export default class userSchema {
   updateBank(bank) {
     this.bank += bank;
   }
-
 }
