@@ -577,7 +577,7 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
 
     default:
       extra = {
-        setDescription,
+        setDescription:'Lệnh không hợp lệ'
       };
       break;
   }
