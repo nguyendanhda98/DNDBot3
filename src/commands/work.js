@@ -4,7 +4,7 @@ import messageEmbed from '../util/messageEmbed.js';
 
 export const name = 'work';
 export const aliases = ['w'];
-export const cooldown = 0;
+export const cooldown = 30;
 export const permissions = [];
 export const description = 'work for DND';
 
