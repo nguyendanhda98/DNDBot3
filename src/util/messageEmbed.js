@@ -19,7 +19,7 @@ export default (message, discord, extra) => {
     .setTimestamp()
     .setColor('#5865f2')
     .setFooter({
-      text: 'Sử dụng \`d.help\` để xem chi tiết.',
+      text: 'Sử dụng d.help để xem chi tiết.',
     });
 
   if (setDescription) {

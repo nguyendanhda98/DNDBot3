@@ -50,6 +50,9 @@ Rời bàn: \`d.bc leave\`
           },
           { name: 'bc', value: `Chơi Bầu Cua. \`d.bc new\`` },
         ],
+        setFooter: {
+          text: 'Sử dụng d.help <tên lệnh> để xem chi tiết.',
+        },
       };
       break;
   }
