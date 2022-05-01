@@ -1,5 +1,5 @@
 export default class player {
-  constructor(id, bet = false, playing) {
+  constructor(id, bet = false, playing = 0) {
     this.id = id;
     this.bet = bet;
     this.playing = playing;

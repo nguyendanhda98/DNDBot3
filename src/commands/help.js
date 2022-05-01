@@ -1,3 +1,4 @@
+import { bcEmojis } from '../util/constant.js';
 import messageEmbed from '../util/messageEmbed.js';
 
 export const name = 'help';
@@ -11,9 +12,18 @@ export function execute(message, args, cmd, client, discord, profileData) {
   // message.channel.send('pong!');
 
   switch (args[0]) {
-    case 'baucua':
+    case 'bc':
       extra = {
         setTitle: 'Hướng dẫn chơi Bầu Cua',
+        setDescription: `Tạo phòng: \`d.bc new\`
+Vào bàn: \`d.bc join <nhà cái>\`
+Đặt cược: \`d.bc bet <con vật> <tiền cược>\`
+Bắt đầu: \`d.bc start\`
+Con vật: ${bcEmojis.bau}\`bau\`, ${bcEmojis.cua}\`cua\`, ${bcEmojis.tom}\`tom\`, ${bcEmojis.ca}\`ca\`, ${bcEmojis.nai}\`nai\`, ${bcEmojis.ga}\`ga\`
+Thông tin bàn: \`d.bc info\`
+Rời bàn: \`d.bc leave\`
+Đá người chơi: \`d.bc kick @user\`
+\u200B`,
       };
       break;
     default:
@@ -37,6 +47,7 @@ export function execute(message, args, cmd, client, discord, profileData) {
             name: 'Tạo bàn chơi 3 cây',
             value: `\`3cay new\` \`3cay join @user\` \`3cay ready\` \`3cay bet <tiền cược>\` \`3cay start\` \`3cay info\``,
           },
+          { name: 'bc', value: `Chơi Bầu Cua. \`d.bc new\`` },
         ],
       };
       break;

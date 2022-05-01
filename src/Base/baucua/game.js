@@ -10,6 +10,7 @@ class game {
     this.maxPlayer = maxPlayer;
     this.members = [];
     this.status = status;
+    this.winAmount = 0;
   }
 }
 
@@ -77,7 +78,7 @@ const start = async (hostID) => {
         break;
     }
   });
-  let hostWinAmount = 0;
+
   getPlayer(hostID).forEach(async (mem) => {
     mem.bets.forEach((bet) => {
       let flag = false;
@@ -97,10 +98,10 @@ const start = async (hostID) => {
         mem.winAmount -= bet.amount;
       }
     });
-    hostWinAmount -= mem.winAmount;
+    findGame(hostID).winAmount -= mem.winAmount;
     await updateMoney(mem.id, { cash: mem.winAmount });
   });
-  await updateMoney(hostID, { cash: hostWinAmount });
+  await updateMoney(hostID, { cash: findGame(hostID).winAmount });
 
   arrNumber.forEach((num, index) => {
     switch (num) {
@@ -147,7 +148,90 @@ const leave = (userID) => {
   return false;
 };
 
+const baucuaBot = async (mem) => {
+
+  let x1 = Math.ceil(Math.random() * 6);
+  let x2 = Math.ceil(Math.random() * 6);
+  let x3 = Math.ceil(Math.random() * 6);
+
+  // let x1 = 2;
+  // let x2 = 2;
+  // let x3 = 2;
+
+  let arrNumber = [x1, x2, x3];
+
+  arrNumber.forEach((num, index) => {
+    switch (num) {
+      case 1:
+        arrNumber[index] = 'bau';
+        break;
+      case 2:
+        arrNumber[index] = 'cua';
+        break;
+      case 3:
+        arrNumber[index] = 'tom';
+        break;
+      case 4:
+        arrNumber[index] = 'ca';
+        break;
+      case 5:
+        arrNumber[index] = 'nai';
+        break;
+      case 6:
+        arrNumber[index] = 'ga';
+        break;
+    }
+  });
+
+  mem.bets.forEach((bet) => {
+    let flag = false;
+    if (bet.name == arrNumber[0]) {
+      mem.winAmount += bet.amount;
+      flag = true;
+    }
+    if (bet.name == arrNumber[1]) {
+      mem.winAmount += bet.amount;
+      flag = true;
+    }
+    if (bet.name == arrNumber[2]) {
+      mem.winAmount += bet.amount;
+      flag = true;
+    }
+    if (!flag) {
+      mem.winAmount -= bet.amount;
+    }
+  });
+
+  await updateMoney(mem.id, { cash: mem.winAmount });
+
+  arrNumber.forEach((num, index) => {
+    switch (num) {
+      case 'bau':
+        arrNumber[index] = bcEmojis.bau;
+        break;
+      case 'cua':
+        arrNumber[index] = bcEmojis.cua;
+        break;
+      case 'tom':
+        arrNumber[index] = bcEmojis.tom;
+        break;
+      case 'ca':
+        arrNumber[index] = bcEmojis.ca;
+        break;
+      case 'nai':
+        arrNumber[index] = bcEmojis.nai;
+        break;
+      case 'ga':
+        arrNumber[index] = bcEmojis.ga;
+        break;
+    }
+  });
+
+  return arrNumber;
+};
+
 const resetBet = (hostID) => {
+  findGame(hostID).winAmount = 0;
   getPlayer(hostID).forEach((player) => {
     player.bets = [
       { name: 'bau', amount: 0 },
@@ -172,6 +256,15 @@ const checkBet = (hostID) => {
   return waiting;
 };
 
+const totalBet = (hostID) => {
+  let hostWinAmount = 0;
+  getPlayer(hostID).forEach((mem) => {
+    mem.bets.forEach((bet) => {
+      hostWinAmount += bet.amount;
+    });
+  });
+  return hostWinAmount;
+};
 const countPlayer = (userID) => {
   if (findPlayer(userID)) {
     let hostID = findPlayer(userID).playing;
@@ -196,4 +289,6 @@ export {
   resetBet,
   checkBet,
   countPlayer,
+  totalBet,
+  baucuaBot,
 };

@@ -13,6 +13,8 @@ import {
   resetBet,
   checkBet,
   countPlayer,
+  totalBet,
+  baucuaBot,
 } from '../Base/baucua/game.js';
 import player from '../Base/baucua/player.js';
 import messageEmbed from '../util/messageEmbed.js';
@@ -62,11 +64,10 @@ export async function execute(
       extra = {
         setTitle: 'Bầu Cua',
         setDescription: `Tạo phòng: \`d.bc new\`
-Vào phòng: \`d.bc join <nhà cái>\`
+Vào bàn: \`d.bc join <nhà cái>\`
 Đặt cược: \`d.bc bet <con vật> <tiền cược>\`
 Bắt đầu: \`d.bc start\`
-
-Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
+Con vật: ${bcEmojis.bau}\`bau\`, ${bcEmojis.cua}\`cua\`, ${bcEmojis.tom}\`tom\`, ${bcEmojis.ca}\`ca\`, ${bcEmojis.nai}\`nai\`, ${bcEmojis.ga}\`ga\`
 \u200B`,
         addFields: [
           {
@@ -75,8 +76,8 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
             inline: false,
           },
           {
-            name: 'Người chơi',
-            value: 'Kết quả: ... ... ...',
+            name: 'Kết quả',
+            value: '... ... ...',
             inline: true,
           },
         ],
@@ -122,11 +123,10 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
         extra = {
           setTitle: 'Bầu Cua',
           setDescription: `Tạo phòng: \`d.bc new\`
-Vào phòng: \`d.bc join <nhà cái>\`
+Vào bàn: \`d.bc join <nhà cái>\`
 Đặt cược: \`d.bc bet <con vật> <tiền cược>\`
 Bắt đầu: \`d.bc start\`
-
-Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
+Con vật: ${bcEmojis.bau}\`bau\`, ${bcEmojis.cua}\`cua\`, ${bcEmojis.tom}\`tom\`, ${bcEmojis.ca}\`ca\`, ${bcEmojis.nai}\`nai\`, ${bcEmojis.ga}\`ga\`
 \u200B`,
           addFields: [
             {
@@ -135,8 +135,8 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
               inline: false,
             },
             {
-              name: 'Người chơi',
-              value: 'Kết quả: ... ... ...',
+              name: 'Kết quả',
+              value: '... ... ...',
               inline: false,
             },
           ],
@@ -145,7 +145,7 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
       }
       // extra = {
       //   setDescription: `Bàn trống`,
-      //   addFields: [{ name: '\u200B', value: 'Kết quả: ... ... ...', inline: false }],
+      //   addFields: [{ name: '\u200B', value: '... ... ...', inline: false }],
       // };
 
       let currentPlayerInfo1 = countPlayer(author.id);
@@ -257,11 +257,10 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
           extra = {
             setTitle: 'Bầu Cua',
             setDescription: `Tạo phòng: \`d.bc new\`
-Vào phòng: \`d.bc join <nhà cái>\`
+Vào bàn: \`d.bc join <nhà cái>\`
 Đặt cược: \`d.bc bet <con vật> <tiền cược>\`
 Bắt đầu: \`d.bc start\`
-
-Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
+Con vật: ${bcEmojis.bau}\`bau\`, ${bcEmojis.cua}\`cua\`, ${bcEmojis.tom}\`tom\`, ${bcEmojis.ca}\`ca\`, ${bcEmojis.nai}\`nai\`, ${bcEmojis.ga}\`ga\`
 \u200B`,
             addFields: [
               {
@@ -270,18 +269,14 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
                 inline: false,
               },
               {
-                name: 'Người chơi',
-                value: 'Kết quả: ... ... ...',
+                name: 'Kết quả',
+                value: '... ... ...',
                 inline: false,
               },
             ],
             // setDescription: `${author.username} vừa tạo một bàn chơi bầu cua.`,
           };
         }
-        // extra = {
-        //   setDescription: `Bàn trống`,
-        //   addFields: [{ name: '\u200B', value: 'Kết quả: ... ... ...', inline: false }],
-        // };
 
         let currentPlayerInfo2 = countPlayer(author.id);
         if (!currentPlayerInfo2) {
@@ -359,6 +354,13 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
         break;
       }
 
+      if (totalBet(author.id) > profileData.cash) {
+        extra = {
+          setDescription: 'Nhà cái không đủ tiền. Không thể bắt đầu!',
+        };
+        break;
+      }
+
       let checkBetArr = checkBet(author.id);
       let userNotBet = [];
       if (checkBetArr.length > 0) {
@@ -379,25 +381,23 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
       extra = {
         setTitle: 'Bầu Cua',
         setDescription: `Tạo phòng: \`d.bc new\`
-Vào phòng: \`d.bc join <nhà cái>\`
+Vào bàn: \`d.bc join <nhà cái>\`
 Đặt cược: \`d.bc bet <con vật> <tiền cược>\`
 Bắt đầu: \`d.bc start\`
-
-Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
+Con vật: ${bcEmojis.bau}\`bau\`, ${bcEmojis.cua}\`cua\`, ${bcEmojis.tom}\`tom\`, ${bcEmojis.ca}\`ca\`, ${bcEmojis.nai}\`nai\`, ${bcEmojis.ga}\`ga\`
 \u200B`,
         addFields: [
           {
             name: 'Nhà cái',
-            value: `<@${author.id}>`,
+            value: `<@${author.id}> (${findGame(author.id).winAmount})`,
             inline: false,
           },
           {
-            name: 'Người chơi',
-            value: `Kết quả: ${result}`,
+            name: 'Kết quả',
+            value: `${_.join(result, ' ')}`,
             inline: false,
           },
         ],
-        // setDescription: `${author.username} vừa tạo một bàn chơi bầu cua.`,
       };
 
       let currentPlayer = getPlayer(author.id);
@@ -458,6 +458,24 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
         };
       }
       break;
+    case 'kick':
+      if (!findGame(author.id)) {
+        extra = {
+          setDescription: `Bạn không thể đá <@${target.id}> vì bạn không phải nhà cái.`,
+        };
+        break;
+      }
+      const target = message.mentions.users.first();
+      if (leave(target.id)) {
+        extra = {
+          setDescription: `<@${author.id}> đã đá <@${target.id}> ra khỏi bàn`,
+        };
+      } else {
+        extra = {
+          setDescription: 'Đá thất bại. Người chơi chưa tham gia bàn chơi nào',
+        };
+      }
+      break;
     case 'check':
       check(author.id);
       break;
@@ -466,11 +484,10 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
         extra = {
           setTitle: 'Bầu Cua',
           setDescription: `Tạo phòng: \`d.bc new\`
-Vào phòng: \`d.bc join <nhà cái>\`
+Vào bàn: \`d.bc join <nhà cái>\`
 Đặt cược: \`d.bc bet <con vật> <tiền cược>\`
 Bắt đầu: \`d.bc start\`
-
-Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
+Con vật: ${bcEmojis.bau}\`bau\`, ${bcEmojis.cua}\`cua\`, ${bcEmojis.tom}\`tom\`, ${bcEmojis.ca}\`ca\`, ${bcEmojis.nai}\`nai\`, ${bcEmojis.ga}\`ga\`
 \u200B`,
           addFields: [
             {
@@ -479,8 +496,8 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
               inline: false,
             },
             {
-              name: 'Người chơi',
-              value: 'Kết quả: ... ... ...',
+              name: 'Kết quả',
+              value: '... ... ...',
               inline: false,
             },
           ],
@@ -491,11 +508,10 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
         extra = {
           setTitle: 'Bầu Cua',
           setDescription: `Tạo phòng: \`d.bc new\`
-Vào phòng: \`d.bc join <nhà cái>\`
+Vào bàn: \`d.bc join <nhà cái>\`
 Đặt cược: \`d.bc bet <con vật> <tiền cược>\`
 Bắt đầu: \`d.bc start\`
-
-Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
+Con vật: ${bcEmojis.bau}\`bau\`, ${bcEmojis.cua}\`cua\`, ${bcEmojis.tom}\`tom\`, ${bcEmojis.ca}\`ca\`, ${bcEmojis.nai}\`nai\`, ${bcEmojis.ga}\`ga\`
 \u200B`,
           addFields: [
             {
@@ -504,8 +520,8 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
               inline: false,
             },
             {
-              name: 'Người chơi',
-              value: 'Kết quả: ... ... ...',
+              name: 'Kết quả',
+              value: '... ... ...',
               inline: false,
             },
           ],
@@ -578,10 +594,105 @@ Con vật: \`bau\`, \`cua\`, \`tom\`, \`ca\`, \`nai\`, \`ga\`
 
       break;
 
-    default:
+    default: //Array
+      //arr
+      //name amount, name amount, name amount
+
+      const arr1 = ['bau', 'cua', 'tom', 'ca', 'nai', 'ga'];
+
+      if (!_.includes(arr1, args[0])) {
+        extra = {
+          setTitle: 'Sai cú pháp',
+          setDescription: `Đây là câu lệnh chơi với Bot.
+Chơi với Bot: \`d.bc <con vật> <tiền cược>\`
+Con vật: ${bcEmojis.bau}\`bau\`, ${bcEmojis.cua}\`cua\`, ${bcEmojis.tom}\`tom\`, ${bcEmojis.ca}\`ca\`, ${bcEmojis.nai}\`nai\`, ${bcEmojis.ga}\`ga\``,
+        };
+        break;
+      }
+
+      const betValues1 = _.chunk(args, 2);
+
+      let newPlayer = new player(author.id);
+      for (let e of betValues1) {
+        const name = e[0];
+        const amount = parseInt(e[1]);
+
+        if (!arr1.includes(name)) {
+          extra = {
+            setDescription:
+              'Con vật không hợp lệ. Hãy thử với các con vật sau: `bau`,`cua`,`tom`,`ca`,`nai`,`ga`',
+          };
+          break;
+        }
+        if (amount % 1 != 0 || amount <= 0) {
+          extra = {
+            setDescription: 'Số tiền không hợp lệ',
+          };
+          break;
+        }
+        if (amount > profileData.cash) {
+          extra = {
+            setDescription: 'Bạn không có đủ DND',
+          };
+          break;
+        }
+        _.find(newPlayer.bets, { name: name }).amount = amount;
+      }
+
+      let result1 = await baucuaBot(newPlayer);
+
       extra = {
-        setDescription: 'Lệnh không hợp lệ',
+        setTitle: 'Bầu Cua Bot',
+        setDescription: `Chơi với Bot: \`d.bc <con vật> <tiền cược>\`
+Con vật: ${bcEmojis.bau}\`bau\`, ${bcEmojis.cua}\`cua\`, ${bcEmojis.tom}\`tom\`, ${bcEmojis.ca}\`ca\`, ${bcEmojis.nai}\`nai\`, ${bcEmojis.ga}\`ga\`
+\u200B`,
+        addFields: [
+          {
+            name: 'Kết quả',
+            value: `${_.join(result1, ' ')}`,
+            inline: false,
+          },
+        ],
+        // setDescription: `${author.username} vừa tạo một bàn chơi bầu cua.`,
       };
+
+      let name = `${author.username} (${newPlayer.winAmount})`;
+      let value = [];
+      newPlayer.bets.forEach((bet) => {
+        if (bet.amount != 0) {
+          let name = bet.name;
+          switch (name) {
+            case 'bau':
+              name = bcEmojis.bau;
+              break;
+            case 'cua':
+              name = bcEmojis.cua;
+              break;
+            case 'tom':
+              name = bcEmojis.tom;
+              break;
+            case 'ca':
+              name = bcEmojis.ca;
+              break;
+            case 'nai':
+              name = bcEmojis.nai;
+              break;
+            case 'ga':
+              name = bcEmojis.ga;
+              break;
+          }
+
+          value.push(`${name} ${bet.amount}`);
+        }
+      });
+
+      const objPlayer = {
+        name: name,
+        value: _.join(value, ', '),
+        inline: true,
+      };
+      extra.addFields.push(objPlayer);
+
       break;
   }
 

@@ -17,7 +17,10 @@ export default (message, discord, extra) => {
       iconURL: message.author.displayAvatarURL(),
     })
     .setTimestamp()
-    .setColor('#5865f2');
+    .setColor('#5865f2')
+    .setFooter({
+      text: 'Sử dụng \`d.help\` để xem chi tiết.',
+    });
 
   if (setDescription) {
     messageEmbed.setDescription(setDescription);
