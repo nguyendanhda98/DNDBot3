@@ -15,7 +15,8 @@ export function execute(message, args, cmd, client, discord, profileData) {
     case 'bc':
       extra = {
         setTitle: 'Hướng dẫn chơi Bầu Cua',
-        setDescription: `Tạo phòng: \`d.bc new\`
+        setDescription: `Chơi với Bot: \`d.bc <con vật> <tiền cược>\`
+Tạo phòng: \`d.bc new\`
 Vào bàn: \`d.bc join <nhà cái>\`
 Đặt cược: \`d.bc bet <con vật> <tiền cược>\`
 Bắt đầu: \`d.bc start\`
